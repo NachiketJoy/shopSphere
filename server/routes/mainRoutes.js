@@ -7,7 +7,6 @@ router.get('/account', authenticateJWT, mainController.account);
 
 router.get('/user/:id/block', mainController.blockUser);
 
-// Route to delete a user
 router.get('/user/:id/delete', mainController.deleteUser);
 
 // admin

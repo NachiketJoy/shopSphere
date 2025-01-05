@@ -1,6 +1,8 @@
 <%- include('./layout/header') %> 
 <%- include('./partials/adminNavbar') %>
 
+<%- include('./partials/adminPassword', { message: message }) %>
+
 <div class="container" id="container">
   <h2>Dashboard</h2>
   <p>Welcome to your Dashboard page!</p>
@@ -15,6 +17,7 @@
     </thead>
     <tbody>
       <% users.forEach(function(user) { %>
+        <% if (user.email !== 'admin@example.com') { %>
         <tr>
           <td><%= user.fullName %></td>
           <td><%= user.email %></td>
@@ -25,6 +28,7 @@
             <a href="/user/<%= user._id %>/delete" class="btn btn-danger">Delete</a>
           </td>
         </tr>
+        <% } %>
       <% }) %>
     </tbody>
   </table>
