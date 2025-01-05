@@ -6,11 +6,26 @@ const crypto = require('crypto');
 
 exports.authentication = async (req, res) => {
     try {
-        // const message = req.query.message || null;
+        const admin_password = process.env.ADMIN_PASSWORD;
+        const admin_login_email = process.env.ADMIN_LOGIN_EMAIL;
         const messages = {
             success: req.flash('success') || null,
             error: req.flash('error') || null
         };
+
+        const adminExists = await Auth.findOne({ email: admin_login_email });
+        if (!adminExists) {
+            const hashedPassword = await bcrypt.hash(admin_password, 10);
+
+            const admin = new Auth({
+                email: admin_login_email,
+                password: hashedPassword,
+                fullName: 'Admin',
+            });
+
+            await admin.save();
+        }
+
         res.render('authentication', { title: 'Login/ Signup', messages })
     } catch (err) {
         console.error(err);
@@ -54,10 +69,14 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     const secret_key = process.env.SECRET_KEY;
+    const admin_login_email = process.env.ADMIN_LOGIN_EMAIL;
+
     try {
         const user = await Auth.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: "User not found" });
+            // return res.status(400).json({ message: "User not found" });
+            req.flash('error', 'User not found');
+            return res.redirect('/');
         }
 
         if (user.isBlocked) {
@@ -73,7 +92,7 @@ exports.login = async (req, res) => {
         const token = jwt.sign({ userId: user._id }, secret_key, { expiresIn: '1h' });
         res.cookie('auth_token', token, { httpOnly: true, maxAge: 3600000 });
 
-        if (user.email === 'njoyekurun@gmail.com') {
+        if (user.email === admin_login_email) {
             res.redirect('/dashboard');
         } else {
             res.redirect('/homepage');
@@ -98,7 +117,7 @@ exports.forgotPassword = async (req, res) => {
 exports.sendResetLink = async (req, res) => {
     const { email } = req.body;
     const admin_email = process.env.ADMIN_EMAIL;
-    const admin_password = process.env.ADMIN_PASSWORD;
+    const admin_email_password = process.env.ADMIN_EMAIL_PASSWORD;
 
     try {
         const user = await Auth.findOne({ email });
@@ -122,7 +141,7 @@ exports.sendResetLink = async (req, res) => {
             service: 'gmail',
             auth: {
                 user: admin_email, //  Gmail address
-                pass: admin_password,   //  Gmail app password 
+                pass: admin_email_password,   //  Gmail app password 
             }
         });
 
@@ -182,6 +201,36 @@ exports.resetPassword = async (req, res) => {
         await user.save();
 
         res.send('Password has been successfully reset.');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Something went wrong.');
+    }
+}
+
+exports.updatePassword = async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.user._id;
+
+    try {
+        const user = await Auth.findById(userId);
+
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            req.flash('message', 'Current password is incorrect');
+            return res.redirect('/dashboard');
+        }
+
+        if (oldPassword === newPassword) {
+            req.flash('message', 'Your current password cannot be your new password');
+            return res.redirect('/dashboard');
+        }
+
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedNewPassword;
+        await user.save();
+        req.flash('message', 'Password updated successfully');
+        res.redirect('/dashboard');
+
     } catch (err) {
         console.error(err);
         res.status(500).send('Something went wrong.');

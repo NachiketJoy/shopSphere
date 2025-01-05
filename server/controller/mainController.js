@@ -13,12 +13,14 @@ exports.account = async (req, res) => {
 
 exports.allUsers = async (req, res) => {
     try {
+        const admin_login_email = process.env.ADMIN_LOGIN_EMAIL;
         const users = await Auth.find();
-        const adminUser = users.find(user => user.email === 'njoyekurun@gmail.com');
+        const adminUser = users.find(user => user.email === admin_login_email);
         const isAdmin = adminUser.email === req.user.email;
+        const message = req.flash('message') || '';
 
         if (isAdmin) {
-            res.render('dashboard', { title: 'Dashboard', users });
+            res.render('dashboard', { title: 'Dashboard', users, message });
         } else {
             res.status(403).render('404', { title: 'Forbidden' });
         }
