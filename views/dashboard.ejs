@@ -1,0 +1,34 @@
+<%- include('./layout/header') %> 
+<%- include('./partials/adminNavbar') %>
+
+<div class="container" id="container">
+  <h2>Dashboard</h2>
+  <p>Welcome to your Dashboard page!</p>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(function(user) { %>
+        <tr>
+          <td><%= user.fullName %></td>
+          <td><%= user.email %></td>
+          <td>
+            <a href="/user/<%= user._id %>/block" class="btn <%= user.isBlocked ? 'btn-success' : 'btn-warning' %>">
+                <%= user.isBlocked ? 'Unblock' : 'Block' %>
+              </a>
+            <a href="/user/<%= user._id %>/delete" class="btn btn-danger">Delete</a>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+</div>
+
+<%- include('./layout/footer') %>

@@ -1,0 +1,18 @@
+<nav class="navbar-fixed navbar">
+  <div class="nav-wrapper">
+    <a href="#!" class="brand-logo">Logo</a>
+
+    <% if(user.email === 'njoyekurun@gmail.com') { %>
+      <ul class="nav-items">
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li><button id="logout">Logout</button></li>
+      </ul>
+      <% } else { %>
+      <ul class="nav-items">
+        <li><a href="/homepage">Home</a></li>
+        <li><a href="/account">Account</a></li>
+        <li><button id="logout">Logout</button></li>
+      </ul>
+      <% } %>
+  </div>
+</nav>

@@ -1,0 +1,19 @@
+<%- include('./layout/header') %> 
+<%- include('./partials/navbar') %>
+
+<div class="container" id="container">
+  <h2><%= title %></h2>
+  <form action="/user/<%= user._id %>/edit" method="POST">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" name="name" value="<%= user.fullName %>" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+  </form>
+</div>
+
+<%- include('./layout/footer') %>
