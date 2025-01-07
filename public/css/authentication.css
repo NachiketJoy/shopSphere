@@ -1,0 +1,165 @@
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-image: url("/assets/img/bg_login.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.authentication-content {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  width: 40%;
+  max-width: 100%;
+  min-height: 480px;
+  overflow: hidden;
+  border-radius: 30px;
+  background-color: var(--white);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+  transform: translate(-50%, -50%);
+}
+
+.authentication-content.active .sign-in {
+  transform: translateX(100%);
+}
+
+.authentication-content.active .sign-up {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: move 0.6s;
+}
+
+.authentication-content.active .toggle-authentication {
+  transform: translateX(-100%);
+  border-radius: 0 150px 100px 0;
+}
+
+.authentication-content.active .toggle {
+  transform: translateX(50%);
+}
+
+.authentication-content.active .toggle-left {
+  transform: translateX(0%);
+}
+
+.authentication-content.active .toggle-right {
+  transform: translateX(200%);
+}
+
+.form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
+}
+
+.form-container form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  height: 100%;
+  background-color: var(--white);
+}
+
+.form-container form input[type] {
+  width: 100%;
+  height: 24px;
+  margin: 8px 0;
+  padding: 10px 15px;
+  font-size: 13px;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--background);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+.form-container .btn, .toggle-panel .btn {
+  margin: 15px 0;
+}
+
+.sign-in,
+.sign-up {
+  left: 0;
+  width: 50%;
+  z-index: 2;
+}
+
+.sign-up {
+  opacity: 0;
+  z-index: 1;
+}
+
+.toggle-authentication {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: all 0.6s ease-in-out;
+  border-radius: 150px 0 0 100px;
+  z-index: 99;
+}
+
+.toggle {
+  background-color: var(--primary);
+  height: 100%;
+  background: linear-gradient(288deg, var(--primary), #043873);
+  color: var(--white);
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: all 0.6s ease-in-out;
+}
+
+.toggle-panel {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 30px;
+  text-align: center;
+  top: 0;
+  transform: translateX(0);
+  transition: all 0.6s ease-in-out;
+}
+
+.toggle-panel span {
+  font-size: 12px;
+}
+
+.toggle-left {
+  transform: translateX(-200%);
+}
+
+.toggle-right {
+  right: 0;
+  transform: translateX(0);
+}
+
+.account-exist {
+  margin-top: 30px;
+}
+
+.forgot-password {
+  display: none;
+  z-index: 10;
+}
+
+
