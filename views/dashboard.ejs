@@ -1,13 +1,11 @@
 <%- include('./layout/header') %> 
 <%- include('./partials/adminNavbar') %>
 
-<%- include('./partials/adminPassword', { message: message }) %>
+<div class="container" id="dashboard">
+  <h2>Users</h2>
+  <p>Lists of Users</p>
 
-<div class="container" id="container">
-  <h2>Dashboard</h2>
-  <p>Welcome to your Dashboard page!</p>
-
-  <table class="table table-striped">
+  <table class="table" id="userTable">
     <thead>
       <tr>
         <th>Name</th>
@@ -32,6 +30,8 @@
       <% }) %>
     </tbody>
   </table>
+
+  <%- include('./partials/adminPassword', { message: message }) %>
 
 </div>
 

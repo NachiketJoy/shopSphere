@@ -1,11 +1,37 @@
-<nav class="navbar-fixed navbar">
-    <div class="nav-wrapper">
+<div class="navbar-fixed">
+  <nav class="nav admin-nav">
+    <div class="container nav-wrapper">
       <a href="#!" class="brand-logo">Logo</a>
 
-      <ul class="nav-items">
+      <ul class="right nav-items">
         <li><a href="/homepage">View website</a></li>
-        <li><button id="logout">Logout</button></li>
+        <li><button id="logout" class="btn btn__primary">Logout</button></li>
       </ul>
     </div>
   </nav>
-  
+
+  <div class="sidenav">
+    <div class="profile">
+      <img class="profile__img" src="/assets/img/admin.jpg" />
+      <p class="profile__title">Admin</p>
+    </div>
+    <div class="divider"></div>
+    <ul class="sidenav-items">
+      <li>
+        <a><i class="material-icons">cloud</i>Dashboard</a>
+      </li>
+      <li>
+        <a href="#!"><i class="material-icons">cloud</i>Order</a>
+      </li>
+      <li>
+        <a href="#!"><i class="material-icons">cloud</i>Manage Product</a>
+      </li>
+      <li>
+        <a href="#!"><i class="material-icons">cloud</i>Manage User</a>
+      </li>
+      <li>
+        <a href="#!"><i class="material-icons">cloud</i>Update Password</a>
+      </li>
+    </ul>
+  </div>
+</div>
