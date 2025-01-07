@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
     const currentPage = window.location.pathname;
-    if (currentPage === '/') {
+    if (currentPage === '/' || currentPage === '/dashboard') {
         footer.style.display = 'none';
     }
 
@@ -63,5 +63,14 @@ window.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         document.getElementById("sign-in-form").style.display = "block";
         document.getElementById("forgot-password-container").style.display = "none";
+    });
+
+
+    new DataTable('#userTable', {
+        paging: true,
+        searching: true,
+        ordering: true,
+        info: true,
+        pageLength: 10,
     });
 });
