@@ -1,61 +1,97 @@
 <%- include('./layout/header') %>
 
 <% if (messages.success && messages.success.length > 0) { %>
-  <div class="alert alert-success">
-      <%= messages.success %>
-  </div>
+    <div id="toast__success" data-message="<%= messages.success %>"></div>
 <% } %>
 
 <% if (messages.error && messages.error.length > 0) { %>
-  <div class="alert alert-error">
-      <%= messages.error %>
-  </div>
+      <div id="toast_error" data-message="<%= messages.error %>"></div>
 <% } %>
 
-<div class="container" id="container">
-    <!-- Sign Up Form -->
+<div class="background-image"></div>
+<div class="container authentication-content" id="authentication">
+  <!-- Sign Up Form -->
   <div class="form-container sign-up">
-      <form id="register-form" method="POST" action="/register">
-          <h1>Create Account</h1>
-          <input type="text" id="fullName" name="fullName" placeholder="Name" required>
-          <input type="email" id="email" name="email" placeholder="Email" required>
-          <input type="password" id="password" name="password" placeholder="Password" required>
-          <button type="submit">Sign Up</button>
-      </form>
+    <form id="register-form" method="POST" action="/register">
+      <h1>Create Account</h1>
+      <input
+        type="text"
+        id="fullName"
+        name="fullName"
+        placeholder="Name"
+        required
+      />
+      <input
+        type="email"
+        id="emailRegister"
+        name="email"
+        placeholder="Email"
+        required
+      />
+      <input
+        type="password"
+        id="passwordRegister"
+        name="password"
+        placeholder="Password"
+        required
+      />
+      <button class="btn btn__primary" type="submit">Sign Up</button>
+    </form>
   </div>
   <!-- Sign In Form -->
   <div class="form-container sign-in" id="sign-in-form">
-      <form id="login-form" method="POST" action="/login">
-          <h1>Sign In</h1>
-          <input type="email" id="email" name="email" placeholder="Email" required>
-          <input type="password" id="password" name="password" placeholder="Password" required>
-          <a href="#" id="forgotPassword">Forget Your Password?</a>
-          <button type="submit">Sign In</button>
-      </form>
+    <form id="login-form" method="POST" action="/login">
+      <h1>Sign In</h1>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="Email"
+        required
+      />
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Password"
+        required
+      />
+      <a href="#" id="forgotPassword">Forget Your Password?</a>
+      <button class="btn btn__primary" type="submit">Sign In</button>
+    </form>
   </div>
   <!-- Forgot Password Form -->
-  <div class="form-container forgot-password" id="forgot-password-container" style="display: none;">
+  <div class="form-container forgot-password" id="forgot-password-container">
     <form id="forgot-password-form" method="POST" action="/forgot-password">
-        <h1>Reset Password</h1>
-        <input type="email" id="reset-email" name="email" placeholder="Enter your email" required>
-        <button type="submit">Send Reset Link</button>
-        <p><a href="#" id="back-to-sign-in">Back to Sign In</a></p>
+      <h1>Reset Password</h1>
+      <input
+        type="email"
+        id="reset-email"
+        name="email"
+        placeholder="Enter your email"
+        required
+      />
+      <button class="btn btn__primary" type="submit">Send Reset Link</button>
+      <a href="#" id="back-to-sign-in">Back to Sign In</a>
     </form>
   </div>
 
-  <div class="toggle-container">
-      <div class="toggle">
-          <div class="toggle-panel toggle-left">
-              <h1>Welcome Back!</h1>
-              <p>Ready to shop?</p>
-              <button class="hidden" id="login">Sign In</button>
-          </div>
-          <div class="toggle-panel toggle-right">
-              <h1>Hello!</h1>
-              <p>Register with your personal details to shop with us!</p>
-              <button class="hidden" id="register">Sign Up</button>
-          </div>
+  <div class="toggle-authentication">
+    <div class="toggle">
+      <div class="toggle-panel toggle-left">
+        <h1>Welcome !</h1>
+        <p>Ready to shop? <span> Create an account to continue.</span></p>
+        <div class="account-exist">
+          <p>Already have an Account?</p>
+          <button class="btn btn__secondary" id="login">Sign In</button>
+        </div>
       </div>
+      <div class="toggle-panel toggle-right">
+        <h1>Hello!</h1>
+        <p>Register with your personal details to shop with us!</p>
+        <button class="btn btn__secondary" id="register">Sign Up</button>
+      </div>
+    </div>
   </div>
 </div>
 

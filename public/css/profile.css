@@ -1,0 +1,26 @@
+.info-group {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+  }
+  
+  .info-group label {
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+  }
+
+  .profile-card {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .profile-info {
+    margin-bottom: 20px;
+  }
+  
