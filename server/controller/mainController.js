@@ -1,5 +1,4 @@
 const Auth = require('../models/authModels');
-const jwt = require('jsonwebtoken');
 
 exports.account = async (req, res) => {
     try {
@@ -22,7 +21,7 @@ exports.allUsers = async (req, res) => {
         if (isAdmin) {
             res.render('dashboard', { title: 'Dashboard', users, message });
         } else {
-            res.status(403).render('404', { title: 'Forbidden' });
+            res.status(404).render('404', { title: 'Not Found' });
         }
     } catch (err) {
         res.status(500).json({ message: err.message });
