@@ -37,18 +37,18 @@ exports.register = async (req, res) => {
     const { email, password, fullName } = req.body;
 
     if (!fullName || !email || !password) {
-        return res.status(400).json({ message: "Email and password are required" });
+        req.flash('error', 'All fields are required');
+        return res.redirect('/');
     }
 
     try {
         const userExists = await Auth.findOne({ email });
         if (userExists) {
             req.flash('error', 'User already exists');
-            throw new Error(`User with email ${email} already exists`);
-            // return res.status(400).json({ message: "User already exists" });
+            return res.redirect('/');
         }
-        const hashedPassword = await bcrypt.hash(password, 10);
 
+        const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new Auth({
             fullName,
             email,
@@ -56,7 +56,6 @@ exports.register = async (req, res) => {
         });
 
         await newUser.save();
-        // res.status(201).json({ message: "User registered successfully" });
         req.flash('success', 'User registered successfully!');
         res.redirect('/');
     } catch (err) {
@@ -74,7 +73,6 @@ exports.login = async (req, res) => {
     try {
         const user = await Auth.findOne({ email });
         if (!user) {
-            // return res.status(400).json({ message: "User not found" });
             req.flash('error', 'User not found');
             return res.redirect('/');
         }
@@ -86,7 +84,8 @@ exports.login = async (req, res) => {
         // Check if the password matches
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            req.flash('error', 'Invalid credentials');
+            return res.redirect('/');
         }
 
         const token = jwt.sign({ userId: user._id }, secret_key, { expiresIn: '1h' });
@@ -98,7 +97,6 @@ exports.login = async (req, res) => {
             res.redirect('/homepage');
         }
 
-        // res.status(200).json({ message: "Login successful", token });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: err.message });
@@ -122,7 +120,8 @@ exports.sendResetLink = async (req, res) => {
     try {
         const user = await Auth.findOne({ email });
         if (!user) {
-            return res.status(400).send('User with that email does not exist.');
+            req.flash('error', 'User with that email does not exist.');
+            return res.redirect('/');
         }
 
         // Generate a random token and hash it
@@ -148,11 +147,12 @@ exports.sendResetLink = async (req, res) => {
         // Send the password reset email
         await transporter.sendMail({
             to: email,
-            subject: 'Password Reset Request',
+            subject: 'ShopShere: Password Reset Request',
             text: `Click the following link to reset your password: ${resetUrl}`
         });
 
-        res.send('Password reset link has been sent to your email.');
+        req.flash('success', 'Password reset link has been sent to your email');
+        return res.redirect('/');
     } catch (err) {
         console.error(err);
         res.status(500).send('Something went wrong.');
@@ -165,12 +165,12 @@ exports.resetPasswordPage = async (req, res) => {
     try {
         const user = await Auth.findOne({ email });
         if (!user || !user.passwordResetToken) {
-            return res.status(400).send('Invalid reset request.');
+            return res.status(400).render('400', { title: 'Invalid reset request' });
         }
 
         const isValidToken = bcrypt.compareSync(token, user.passwordResetToken);
         if (!isValidToken || user.passwordResetExpires < Date.now()) {
-            return res.status(400).send('Reset token is invalid or has expired.');
+            return res.status(400).render('400', { title: 'Reset token is invalid or has expired' });
         }
 
         res.render('resetPassword', { title: 'Reset Password', email, token });
@@ -186,12 +186,12 @@ exports.resetPassword = async (req, res) => {
     try {
         const user = await Auth.findOne({ email });
         if (!user || !user.passwordResetToken) {
-            return res.status(400).send('Invalid reset request.');
+            return res.status(400).render('400', { title: 'Invalid reset request' });
         }
 
         const isValidToken = bcrypt.compareSync(req.body.token, user.passwordResetToken);
         if (!isValidToken || user.passwordResetExpires < Date.now()) {
-            return res.status(400).send('Reset token is invalid or has expired.');
+            return res.status(400).render('400', { title: 'Reset token is invalid or has expired' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -200,7 +200,8 @@ exports.resetPassword = async (req, res) => {
         user.passwordResetExpires = undefined; // Clear expiry time
         await user.save();
 
-        res.send('Password has been successfully reset.');
+        req.flash('success', 'Password has been successfully reset.');
+        return res.redirect('/');
     } catch (err) {
         console.error(err);
         res.status(500).send('Something went wrong.');
