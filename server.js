@@ -9,6 +9,7 @@ const port = process.env.PORT || 3000;
 const connectDB = require("./server/config/db");
 const authRoutes = require("./server/routes/authRoutes");
 const mainRoutes = require("./server/routes/mainRoutes");
+const productRoutes = require("./server/routes/productRoutes")
 
 require("dotenv").config();
 
@@ -35,6 +36,7 @@ app.use(cookieParser());
 app.use(flash());
 app.use('/', authRoutes);
 app.use('/', mainRoutes);
+app.use('/', productRoutes)
 
 app.listen(port, () => {
   console.log("App listening to: " + port);

@@ -1,10 +1,205 @@
-<%- include('./layout/header') %> <%- include('./partials/navbar') %>
+<%- include('./layout/header') %>
+  <%- include('./partials/navbar') %>
 
-<div class="container homepage" id="container">
-  <h2>Homepage</h2>
-  <p>List of products</p>
+    <div class="container homepage" id="container">
+      <h2>Homepage</h2>
 
-  <%- include('./partials/cards.ejs') %>
-</div>
+      <div class="row">
+        <div class="col s12">
+          <div class="card">
+            <div class="card-content">
+              <form id="searchForm">
+                <div class="input-field">
+                  <input type="text" id="search" name="search">
+                  <label for="search">Search products</label>
+                </div>
 
-<%- include('./layout/footer') %>
+                <div class="input-field">
+                  <select id="retailer" name="retailer">
+                    <option value="">All Retailers</option>
+                    <option value="Amazon">Amazon</option>
+                    <option value="Walmart">Walmart</option>
+                    <option value="Target">Target</option>
+                    <option value="Best Buy">Best Buy</option>
+                    <option value="Costco">Costco</option>
+                    <option value="ebay">eBay</option>
+                    <option value="Newegg">Newegg</option>
+                    <option value="Home Depot">Home Depot</option>
+                    <option value="Macy's">Macy's</option>
+                    <option value="PetSmart">PetSmart</option>
+                  </select>
+                  <label>Filter by Retailer</label>
+                </div>
+
+                <div class="input-field">
+                  <select id="sortBy" name="sortBy">
+                    <option value="">Sort By</option>
+                    <option value="price">Price</option>
+                    <option value="quantity">Quantity</option>
+                  </select>
+                  <label>Sort By</label>
+                </div>
+
+                <div class="input-field">
+                  <select id="order" name="order">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                  </select>
+                  <label>Order</label>
+                </div>
+
+                <button class="btn waves-effect waves-light" type="submit">
+                  Search
+                  <i class="material-icons right">search</i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" id="productsContainer">
+      </div>
+
+      <div class="row">
+        <div class="col s12 center-align" id="pagination">
+        </div>
+      </div>
+    </div>
+
+    <%- include('./layout/footer') %>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          var elems = document.querySelectorAll('select');
+          M.FormSelect.init(elems);
+
+          fetchProducts();
+
+          document.getElementById('searchForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            fetchProducts();
+          });
+        });
+
+        async function fetchProducts(page = 1) {
+          try {
+            const search = document.getElementById('search').value;
+            const retailer = document.getElementById('retailer').value;
+            const sortBy = document.getElementById('sortBy').value;
+            const order = document.getElementById('order').value;
+
+            const queryParams = new URLSearchParams({
+              search,
+              retailer,
+              sortBy,
+              order,
+              page,
+              limit: 10
+            });
+
+            const response = await fetch(`/products?${queryParams}`);
+            const data = await response.json();
+
+            if (data.success) {
+              displayProducts(data.data);
+              displayPagination(data.pagination);
+            } else {
+              M.toast({ html: 'Error loading products' });
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            M.toast({ html: 'Error loading products' });
+          }
+        }
+
+        function displayProducts(products) {
+          const container = document.getElementById('productsContainer');
+          container.innerHTML = products.map(product => `
+    <div class="col s12 m6 l4">
+      <div class="card">
+        <div class="card-image">
+          <img src="${product.image || 'https://placehold.co/600x400'}">
+          <span class="card-title">${product.name}</span>
+          <a class="btn-floating halfway-fab waves-effect waves-light red">
+            <i class="material-icons">add</i>
+          </a>
+        </div>
+        <div class="card-content">
+          <p class="price">Price: $${product.price}</p>
+          <p class="quantity">Quantity: ${product.quantity}</p>
+          <p>${product.description}</p>
+          <p class="retailer">Retailer: ${product.retailer}</p>
+        </div>
+      </div>
+    </div>
+  `).join('');
+        }
+
+        function displayPagination(pagination) {
+          const container = document.getElementById('pagination');
+          let html = '<ul class="pagination">';
+
+          html += `
+    <li class="${pagination.currentPage === 1 ? 'disabled' : 'waves-effect'}">
+      <a href="#!" onclick="fetchProducts(${pagination.currentPage - 1})">
+        <i class="material-icons">chevron_left</i>
+      </a>
+    </li>
+  `;
+
+          for (let i = 1; i <= pagination.totalPages; i++) {
+            html += `
+      <li class="${pagination.currentPage === i ? 'active' : 'waves-effect'}">
+        <a href="#!" onclick="fetchProducts(${i})">${i}</a>
+      </li>
+    `;
+          }
+
+          html += `
+    <li class="${pagination.currentPage === pagination.totalPages ? 'disabled' : 'waves-effect'}">
+      <a href="#!" onclick="fetchProducts(${pagination.currentPage + 1})">
+        <i class="material-icons">chevron_right</i>
+      </a>
+    </li>
+  `;
+
+          html += '</ul>';
+          container.innerHTML = html;
+        }
+      </script>
+
+      <style>
+        .card .card-content .price {
+          font-weight: bold;
+          color: #26a69a;
+        }
+
+        .card .card-content .quantity {
+          color: #666;
+        }
+
+        .card .card-content .retailer {
+          font-style: italic;
+          color: #999;
+        }
+
+        .pagination {
+          margin-top: 20px;
+        }
+
+        #searchForm {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+        }
+
+        #searchForm .input-field {
+          margin: 10px;
+          min-width: 200px;
+        }
+
+        #searchForm button {
+          margin-top: 20px;
+        }
+      </style>
