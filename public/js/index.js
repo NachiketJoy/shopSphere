@@ -3,11 +3,19 @@ window.addEventListener('DOMContentLoaded', function () {
     const registerBtn = document.getElementById('register');
     const loginBtn = document.getElementById('login');
     const logoutBtn = document.getElementById('logout');
+    const manageProductBtn = document.getElementById('manageProduct');
+    const viewOrderBtn = document.getElementById('viewOrder');
     const forgotPassword = document.getElementById('forgotPassword');
     const backToSignIn = document.getElementById('back-to-sign-in');
     const footer = document.getElementById('footer');
     const toastSuccess = document.getElementById('toast__success');
     const toastError = document.getElementById('toast_error');
+
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.querySelector('.loader-content').style.display = 'none';
+        }, 2000);
+    });
 
     if (toastSuccess !== null || toastError !== null) {
         if (toastSuccess) {
@@ -28,6 +36,11 @@ window.addEventListener('DOMContentLoaded', function () {
     const currentPage = window.location.pathname;
     if (currentPage === '/' || currentPage === '/dashboard') {
         footer.style.display = 'none';
+    }
+
+    if(currentPage === '/dashboard') {
+        manageProductBtn.addEventListener('click', fetchProducts);
+        viewOrderBtn.addEventListener('click', fetchOrders)
     }
 
     registerBtn?.addEventListener('click', () => {
@@ -65,12 +78,27 @@ window.addEventListener('DOMContentLoaded', function () {
         document.getElementById("forgot-password-container").style.display = "none";
     });
 
-
-    new DataTable('#userTable', {
-        paging: true,
-        searching: true,
-        ordering: true,
-        info: true,
-        pageLength: 10,
-    });
 });
+
+function adminNav(evt, navItems) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByClassName("tablinks");
+    tablist = document.getElementsByClassName("sidenav-items")[0].getElementsByTagName("li");
+
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+    }
+
+    for (i = 0; i < tablist.length; i++) {
+        tablist[i].classList.remove("active");
+    }
+
+    document.getElementById(navItems).style.display = "block";
+    evt.currentTarget.classList.add("active");
+    evt.currentTarget.closest("li").classList.add("active");
+}
