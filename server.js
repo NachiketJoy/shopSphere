@@ -10,6 +10,7 @@ const connectDB = require("./server/config/db");
 const authRoutes = require("./server/routes/authRoutes");
 const mainRoutes = require("./server/routes/mainRoutes");
 const productRoutes = require("./server/routes/productRoutes")
+const cartRoutes = require("./server/routes/cartRoutes")
 
 require("dotenv").config();
 
@@ -37,6 +38,7 @@ app.use(flash());
 app.use('/', authRoutes);
 app.use('/', mainRoutes);
 app.use('/', productRoutes)
+app.use('/', cartRoutes)
 
 app.listen(port, () => {
   console.log("App listening to: " + port);

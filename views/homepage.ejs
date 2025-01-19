@@ -71,6 +71,8 @@
 
       <script>
         document.addEventListener('DOMContentLoaded', function () {
+          updateCartCount();
+
           var elems = document.querySelectorAll('select');
           M.FormSelect.init(elems);
 
@@ -116,24 +118,24 @@
         function displayProducts(products) {
           const container = document.getElementById('productsContainer');
           container.innerHTML = products.map(product => `
-    <div class="col s12 m6 l4">
-      <div class="card">
-        <div class="card-image">
-          <img src="${product.image || 'https://placehold.co/600x400'}">
-          <span class="card-title">${product.name}</span>
-          <a class="btn-floating halfway-fab waves-effect waves-light red">
-            <i class="material-icons">add</i>
-          </a>
-        </div>
-        <div class="card-content">
-          <p class="price">Price: $${product.price}</p>
-          <p class="quantity">Quantity: ${product.quantity}</p>
-          <p>${product.description}</p>
-          <p class="retailer">Retailer: ${product.retailer}</p>
-        </div>
-      </div>
-    </div>
-  `).join('');
+          <div class="col s12 m6 l4">
+            <div class="card">
+              <div class="card-image">
+                <img src="${product.image || 'https://placehold.co/600x400'}">
+                <span class="card-title">${product.name}</span>
+                <a class="btn-floating halfway-fab waves-effect waves-light red" onclick="addToCart('${product._id}')">
+                  <i class="material-icons">add</i>
+                </a>
+              </div>
+              <div class="card-content">
+                <p class="price">Price: $${product.price}</p>
+                <p class="quantity">Quantity: ${product.quantity}</p>
+                <p>${product.description}</p>
+                <p class="retailer">Retailer: ${product.retailer}</p>
+              </div>
+            </div>
+          </div>
+        `).join('');
         }
 
         function displayPagination(pagination) {
@@ -141,32 +143,66 @@
           let html = '<ul class="pagination">';
 
           html += `
-    <li class="${pagination.currentPage === 1 ? 'disabled' : 'waves-effect'}">
-      <a href="#!" onclick="fetchProducts(${pagination.currentPage - 1})">
-        <i class="material-icons">chevron_left</i>
-      </a>
-    </li>
-  `;
+            <li class="${pagination.currentPage === 1 ? 'disabled' : 'waves-effect'}">
+              <a href="#!" onclick="fetchProducts(${pagination.currentPage - 1})">
+                <i class="material-icons">chevron_left</i>
+              </a>
+            </li>
+          `;
 
           for (let i = 1; i <= pagination.totalPages; i++) {
             html += `
-      <li class="${pagination.currentPage === i ? 'active' : 'waves-effect'}">
-        <a href="#!" onclick="fetchProducts(${i})">${i}</a>
-      </li>
-    `;
+              <li class="${pagination.currentPage === i ? 'active' : 'waves-effect'}">
+                <a href="#!" onclick="fetchProducts(${i})">${i}</a>
+              </li>
+            `;
           }
 
           html += `
-    <li class="${pagination.currentPage === pagination.totalPages ? 'disabled' : 'waves-effect'}">
-      <a href="#!" onclick="fetchProducts(${pagination.currentPage + 1})">
-        <i class="material-icons">chevron_right</i>
-      </a>
-    </li>
-  `;
+            <li class="${pagination.currentPage === pagination.totalPages ? 'disabled' : 'waves-effect'}">
+              <a href="#!" onclick="fetchProducts(${pagination.currentPage + 1})">
+                <i class="material-icons">chevron_right</i>
+              </a>
+            </li>
+          `;
 
           html += '</ul>';
           container.innerHTML = html;
         }
+
+        async function addToCart(productId) {
+            try {
+              const response = await fetch('/cart/add', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId })
+              });
+
+              const data = await response.json();
+              if (data.success) {
+                M.toast({ html: 'Item added to cart' });
+                updateCartCount();
+              }
+            } catch (error) {
+              M.toast({ html: 'Error adding item to cart' });
+            }
+          }
+
+          async function updateCartCount() {
+              try {
+                const response = await fetch('/cart/items');
+                const data = await response.json();
+
+                if (data.success) {
+                  const totalItems = data.cartItems.reduce((sum, item) => sum + item.quantity, 0);
+                  document.querySelector('.cart-count').textContent = totalItems;
+                }
+              } catch (error) {
+                console.error('Error updating cart count:', error);
+              }
+            }
       </script>
 
       <style>
@@ -201,5 +237,20 @@
 
         #searchForm button {
           margin-top: 20px;
+        }
+
+        .cart-button {
+          position: relative;
+        }
+
+        .cart-count {
+          position: absolute;
+          top: 0;
+          right: 0;
+          background-color: red;
+          color: white;
+          border-radius: 50%;
+          padding: 2px 6px;
+          font-size: 12px;
         }
       </style>
