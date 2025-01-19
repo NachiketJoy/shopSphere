@@ -8,13 +8,19 @@
           <li><button id="logout" class="btn btn__primary">Logout</button></li>
         </ul>
         <% } else { %>
-        <ul class="right nav-items">
-          <li><a href="/homepage">Home</a></li>
-          <li><a href="/account">Account</a></li>
-          <li><a href="#"><%- user.fullName %></a></li>
-          <li><button id="logout" class="btn btn__primary">Logout</button></li>
-        </ul>
-        <% } %>
+          <ul class="right nav-items">
+            <li><a href="/homepage">Home</a></li>
+            <li><a href="/account">Account</a></li>
+            <li>
+              <a href="/cart" class="cart-button">
+                <i class="material-icons">shopping_cart</i>
+                <span class="cart-count">0</span>
+              </a>
+            </li>
+            <li><a href="#"><%- user.fullName %></a></li>
+            <li><button id="logout" class="btn btn__primary">Logout</button></li>
+          </ul>
+          <% } %>
     </div>
   </nav>
 </div>
