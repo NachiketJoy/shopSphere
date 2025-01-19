@@ -11,6 +11,7 @@ const authRoutes = require("./server/routes/authRoutes");
 const mainRoutes = require("./server/routes/mainRoutes");
 const productRoutes = require("./server/routes/productRoutes")
 const cartRoutes = require("./server/routes/cartRoutes")
+const orderRoutes = require("./server/routes/orderRoutes")
 
 require("dotenv").config();
 
@@ -39,6 +40,7 @@ app.use('/', authRoutes);
 app.use('/', mainRoutes);
 app.use('/', productRoutes)
 app.use('/', cartRoutes)
+app.use('/dashboard', orderRoutes)
 
 app.listen(port, () => {
   console.log("App listening to: " + port);

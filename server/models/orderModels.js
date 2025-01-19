@@ -36,12 +36,12 @@ const orderSchema = new Schema(
             enum: ['pending', 'delivered'],
             default: 'pending',
         },
-        shippingAddress: {
-            street: { type: String, required: [true, "Street is required"] },
-            city: { type: String, required: [true, "City is required"] },
-            postalCode: { type: String, required: [true, "Postal Code is required"] },
-            country: { type: String, required: [true, "Country is required"] },
-        },
+        // shippingAddress: {
+        //     street: { type: String, required: [true, "Street is required"] },
+        //     city: { type: String, required: [true, "City is required"] },
+        //     postalCode: { type: String, required: [true, "Postal Code is required"] },
+        //     country: { type: String, required: [true, "Country is required"] },
+        // },
         orderedAt: {
             type: Date,
             default: Date.now,
