@@ -85,18 +85,41 @@ async function deleteProduct(id) {
 }
 
 function fetchOrders() {
-    fetch('/dashboard/orders')
+    fetch('/admin/orders')
         .then(response => response.json())
         .then(data => {
-
             const ordersTableBody = document.getElementById('ordersTableBody');
             ordersTableBody.innerHTML = ''; 
 
-             if (Array.isArray(data)) {
+            if (Array.isArray(data)) {
                 data.forEach(order => {
+
+                    const userAddress = order.userId ? `${order.userId.address.street}, ${order.userId.address.city}, ${order.userId.address.country}` : 'N/A';
+                    const userFullName = order.userId && order.userId.authId ? order.userId.authId.fullName : 'N/A';
+                    const totalAmount = order.totalAmount;
+                    const status = order.status;
+                    const orderDate = new Date(order.orderedAt).toLocaleDateString();
+                    const shippedDate = order.shippedAt ? new Date(order.shippedAt).toLocaleDateString() : 'N/A';
+                    const deliveredDate = order.deliveredAt ? new Date(order.deliveredAt).toLocaleDateString() : 'N/A';
+
+                    let orderItemsHtml = '';
+                    order.orderItems.forEach(item => {
+                        const productName = item.productId ? item.productId.name : 'Unknown Product';
+                        const productPrice = item.price;
+                        const quantity = item.quantity;
+                        orderItemsHtml += `<p>${productName} (x${quantity}) - $${productPrice}</p>`;
+                    });
+
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${order.totalAmount}</td>
+                        <td>${userFullName}</td>
+                        <td>${userAddress}</td>
+                        <td>${orderItemsHtml}</td>
+                        <td>$${totalAmount}</td>
+                        <td>${status}</td>
+                        <td>${orderDate}</td>
+                        <td>${shippedDate}</td>
+                        <td>${deliveredDate}</td>
                     `;
                     ordersTableBody.appendChild(row);
                 });
