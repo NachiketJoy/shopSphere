@@ -1,21 +1,13 @@
 <%- include('./layout/header') %> 
 <%- include('./partials/navbar') %>
 
-
     <div class="contact-container">
         <h1>Contact Us</h1>
         <p>Need to get in touch with us?</p>
 
-        <% if (errorMessage) { %>
-            <div class="error-message"><%= errorMessage %></div>
-        <% } %>
-        <% if (successMessage) { %>
-            <div class="success-message"><%= successMessage %></div>
-        <% } %>
-
-        <form action="/contact" method="POST">
+        <form action="/" method="POST">
             <label for="name">Name</label>
-            <input type="text" id="name" name="name" placeholder="Enter your name" value="<%= user?.name || '' %>" aria-label="Name" aria-required="true" required>
+            <input type="text" id="name" name="name" placeholder="Enter your name" value="<%= user?.fullName || '' %>" aria-label="Name" aria-required="true" required>
 
             <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="Enter your email" value="<%= user?.email || '' %>" aria-label="Email" aria-required="true" required>
@@ -26,8 +18,6 @@
             <button type="submit">Submit</button>
         </form>
     </div>
-
-
 
 <%- include('./layout/footer') %>
 
