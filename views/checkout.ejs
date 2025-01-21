@@ -1,0 +1,173 @@
+<%- include('./layout/header') %>
+    <%- include('./partials/navbar') %>
+
+        <div class="container">
+            <h2>Checkout</h2>
+            <div class="order-summary">
+                <h4>Order Summary</h4>
+                <div id="checkoutItems">
+                    <!-- Cart items will be displayed here -->
+                </div>
+                <div class="total-amount">
+                    Total Amount: $<span id="totalAmount">0</span>
+                </div>
+            </div>
+            <form id="checkoutForm">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="cardNumber" type="text" required>
+                        <label for="cardNumber">Card Number</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="expiryDate" type="text" placeholder="MM/YY" required>
+                        <label for="expiryDate">Expiry Date</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="cvv" type="text" required>
+                        <label for="cvv">CVV</label>
+                    </div>
+                </div>
+                <h4>Shipping Address</h4>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="street" type="text" required>
+                        <label for="street">Street</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="city" type="text" required>
+                        <label for="city">City</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="postalCode" type="text" required>
+                        <label for="postalCode">Postal Code</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="country" type="text" required>
+                        <label for="country">Country</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn green">Place Order</button>
+            </form>
+        </div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            async function loadCheckoutItems() {
+                try {
+                    const response = await fetch('/cart/items');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        displayCheckoutItems(data.cartItems);
+                        updateTotalAmount(data.cartItems);
+                    }
+                } catch (error) {
+                    M.toast({ html: 'Error loading cart items' });
+                }
+            }
+
+            function displayCheckoutItems(items) {
+                const container = document.getElementById('checkoutItems');
+                container.innerHTML = items.map(item => `
+                        <div class="checkout-item">
+                            <div class="item-info">
+                                <img src="${item.productId.image || 'https://placehold.co/100x100'}" alt="${item.productId.name}">
+                                <div class="item-details">
+                                    <h6>${item.productId.name}</h6>
+                                    <p>Quantity: ${item.quantity}</p>
+                                    <p>Price: $${item.productId.price}</p>
+                                </div>
+                            </div>
+                            <div class="item-total">
+                                $${(item.productId.price * item.quantity).toFixed(2)}
+                            </div>
+                        </div>
+                    `).join('');
+            }
+
+            function updateTotalAmount(items) {
+                const total = items.reduce((sum, item) => {
+                    return sum + (item.productId.price * item.quantity);
+                }, 0);
+                document.getElementById('totalAmount').textContent = total.toFixed(2);
+            }
+
+            document.addEventListener('DOMContentLoaded', loadCheckoutItems);
+
+            document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const orderData = {
+                    cardNumber: document.getElementById('cardNumber').value,
+                    expiryDate: document.getElementById('expiryDate').value,
+                    cvv: document.getElementById('cvv').value,
+                    shippingAddress: {
+                        street: document.getElementById('street').value,
+                        city: document.getElementById('city').value,
+                        postalCode: document.getElementById('postalCode').value,
+                        country: document.getElementById('country').value
+                    }
+                };
+
+                try {
+                    const response = await fetch('/orders', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(orderData)
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        const socket = io(`/order/${data.order._id}`);
+
+                        socket.on('statusUpdate', (data) => {
+                            M.toast({ html: `Order status: ${data.status}` });
+                            updateNotifications(data);
+                        });
+
+                        window.location.href = '/account';
+                    }
+                } catch (error) {
+                    M.toast({ html: 'Error creating order' });
+                }
+            });
+        </script>
+
+        <style>
+            .order-summary {
+                margin: 20px 0;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+        
+            .checkout-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 0;
+                border-bottom: 1px solid #eee;
+            }
+        
+            .item-info {
+                display: flex;
+                align-items: center;
+            }
+        
+            .item-info img {
+                width: 50px;
+                height: 50px;
+                object-fit: cover;
+                margin-right: 10px;
+            }
+        
+            .total-amount {
+                margin-top: 20px;
+                font-size: 1.2em;
+                font-weight: bold;
+                text-align: right;
+            }
+        </style>
+        <%- include('./layout/footer') %>

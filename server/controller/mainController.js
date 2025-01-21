@@ -1,14 +1,18 @@
-const Auth = require('../models/authModels');
+const Auth = require("../models/authModels");
+const Order = require("../models/orderModels");
 
 exports.account = async (req, res) => {
     try {
         const user = req.user;
-        res.render('account', { title: 'Account', user });
+        const orders = await Order.find({ userId: req.user._id })
+        .populate("orderItems.productId")
+        .sort({ orderedAt: -1 });
+        res.render("account", { title: "Account", user, orders });
     } catch (err) {
-        console.error('Error rendering account:', err);
+        console.error("Error rendering account:", err);
         res.status(500).json({ message: "Internal Server Error" });
     }
-}
+    };
 
 exports.allUsers = async (req, res) => {
     try {
