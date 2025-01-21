@@ -1,6 +1,8 @@
 const Order = require("../models/orderModels");
 const CartItem = require("../models/cartItemsModels");
 const Product = require("../models/productModels");
+const Auth = require("../models/authModels");
+const User = require("../models/userModels");
 const cardValidation = require("../utils/cardValidation");
 let io;
 
@@ -239,10 +241,10 @@ exports.getAllOrders = async (req, res) => {
 exports.allOrders = async (req, res) => {
   try {
     const admin_login_email = process.env.ADMIN_LOGIN_EMAIL;
-    const orders = await OrderItem.find()
+    const orders = await Order.find()
       .populate({
         path: "userId",
-        select: "authId address",
+        select: "address",
         populate: {
           path: "authId",
           select: "fullName",
@@ -252,10 +254,10 @@ exports.allOrders = async (req, res) => {
         path: "orderItems.productId",
         select: "name price",
       });
+
     const users = await Auth.find();
     const adminUser = users.find((user) => user.email === admin_login_email);
     const isAdmin = adminUser.email === req.user.email;
-
     if (isAdmin) {
       res.json(orders);
     } else {

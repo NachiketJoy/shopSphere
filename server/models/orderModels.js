@@ -5,7 +5,7 @@ const orderSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "Auth",
+      ref: "User",
       required: true,
     },
     orderItems: [
