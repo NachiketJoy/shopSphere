@@ -59,3 +59,13 @@ exports.blockUser = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+exports.contact = async (req, res) => {
+    try {
+        const user = req.user;
+        res.render('contact', { title: 'Contact', user });
+    } catch (err) {
+        console.error('Error rendering contact page:', err);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
