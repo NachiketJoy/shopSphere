@@ -9,6 +9,7 @@ router.post("/orders", orderController.createOrder);
 router.delete("/orders/:orderId", orderController.cancelOrder);
 router.get("/orders/:orderId/status", orderController.getOrderStatus);
 router.get("/orders", orderController.getAllOrders);
+router.get("admin/orders", authenticateJWT, orderController.allOrders);
 
 router.get("/checkout", authenticateJWT, (req, res) => {
   res.render("checkout", {
