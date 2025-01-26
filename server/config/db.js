@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // connection to database
 const connectDB = async () => {
-    const mongoURL = process.env.MONGODB_URI;
+    const mongoURL = process.env.MONGODB_URI;  // Get the MongoDB URI from the environment variable
     try {
         mongoose.set('strictQuery', true);
         const conn = await mongoose.connect(mongoURL)

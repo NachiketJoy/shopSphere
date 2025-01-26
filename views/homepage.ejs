@@ -53,8 +53,7 @@
                 </div>
 
                 <button class="btn waves-effect waves-light" type="submit">
-                  Search
-                  <i class="material-icons right">search</i>
+                  <i class="material-icons">Search</i>
                 </button>
               </form>
             </div>
@@ -66,8 +65,7 @@
       </div>
 
       <div class="row">
-        <div class="col s12 center-align" id="pagination">
-        </div>
+        <div class="center-align" id="pagination"></div>
       </div>
     </div>
 
@@ -128,7 +126,7 @@
                 <img src="${product.image || 'https://placehold.co/600x400'}">
                 <span class="card-title">${product.name}</span>
                 <a class="btn-floating halfway-fab waves-effect waves-light red" onclick="addToCart('${product._id}')">
-                  <i class="material-icons">add</i>
+                  <i class="add_button">Add</i>
                 </a>
               </div>
               <div class="card-content">
@@ -142,37 +140,121 @@
         `).join('');
         }
 
+        
+
         function displayPagination(pagination) {
           const container = document.getElementById('pagination');
-          let html = '<ul class="pagination">';
 
+        
+          let html = `
+            <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
+          `;
+
+          // Pagination 
+          html += '<ul class="pagination">';
+
+          // chevron-left
           html += `
-            <li class="${pagination.currentPage === 1 ? 'disabled' : 'waves-effect'}">
-              <a href="#!" onclick="fetchProducts(${pagination.currentPage - 1})">
-                <i class="material-icons">chevron_left</i>
+            <li class="${pagination.currentPage === 1 ? 'disabled' : ''}">
+              <a href="#!" onclick="${pagination.currentPage > 1 ? `fetchProducts(${pagination.currentPage - 1})` : ''}">
+                <i class="fas fa-chevron-left"></i>
               </a>
             </li>
           `;
 
-          for (let i = 1; i <= pagination.totalPages; i++) {
+          // pages
+          const visiblePages = 5; // 每次显示的最大页码数
+          const startPage = Math.max(1, pagination.currentPage - Math.floor(visiblePages / 2));
+          const endPage = Math.min(pagination.totalPages, startPage + visiblePages - 1);
+
+          for (let i = startPage; i <= endPage; i++) {
             html += `
-              <li class="${pagination.currentPage === i ? 'active' : 'waves-effect'}">
+              <li class="${pagination.currentPage === i ? 'active' : ''}">
                 <a href="#!" onclick="fetchProducts(${i})">${i}</a>
               </li>
             `;
           }
 
+          // ... and the last page
+          if (endPage < pagination.totalPages) {
+            html += `
+              <li class="disabled">
+                <a href="#!">...</a>
+              </li>
+              <li>
+                <a href="#!" onclick="fetchProducts(${pagination.totalPages})">${pagination.totalPages}</a>
+              </li>
+            `;
+          }
+
+          // chevron-right
           html += `
-            <li class="${pagination.currentPage === pagination.totalPages ? 'disabled' : 'waves-effect'}">
-              <a href="#!" onclick="fetchProducts(${pagination.currentPage + 1})">
-                <i class="material-icons">chevron_right</i>
+            <li class="${pagination.currentPage === pagination.totalPages ? 'disabled' : ''}">
+              <a href="#!" onclick="${pagination.currentPage < pagination.totalPages ? `fetchProducts(${pagination.currentPage + 1})` : ''}">
+                <i class="fas fa-chevron-right"></i>
               </a>
             </li>
           `;
 
-          html += '</ul>';
+          html += '</ul>'; // 结束 Pagination 的 ul
+
+          // Pagination Jump 部分
+          html += `
+            <div class="pagination-jump">
+              <label for="jumpPage">Go to page:</label>
+              <input type="number" id="jumpPage" min="1" max="${pagination.totalPages}" value="${pagination.currentPage}">
+              <button onclick="jumpToPage(${pagination.totalPages})">Go</button>
+            </div>
+          `;
+
+          html += '</div>'; // 结束父容器的 div
+
+          // 将生成的 HTML 插入容器
           container.innerHTML = html;
         }
+
+        function jumpToPage(totalPages) {
+          const pageInput = document.getElementById('jumpPage');
+          const pageNumber = parseInt(pageInput.value, 10);
+
+          if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
+            fetchProducts(pageNumber);
+          } else {
+            alert('Please enter a valid page number.');
+          }
+        }
+
+        // function displayPagination(pagination) {
+        //   const container = document.getElementById('pagination');
+        //   let html = '<ul class="pagination">';
+
+        //   html += `
+        //     <li class="${pagination.currentPage === 1 ? 'disabled' : 'waves-effect'}">
+        //       <a href="#!" onclick="fetchProducts(${pagination.currentPage - 1})">
+        //         <i class="material-icons">←</i>
+        //       </a>
+        //     </li>
+        //   `;
+
+        //   for (let i = 1; i <= pagination.totalPages; i++) {
+        //     html += `
+        //       <li class="${pagination.currentPage === i ? 'active' : 'waves-effect'}">
+        //         <a href="#!" onclick="fetchProducts(${i})">${i}</a>
+        //       </li>
+        //     `;
+        //   }
+
+        //   html += `
+        //     <li class="${pagination.currentPage === pagination.totalPages ? 'disabled' : 'waves-effect'}">
+        //       <a href="#!" onclick="fetchProducts(${pagination.currentPage + 1})">
+        //         <i class="material-icons">chevron_right</i>
+        //       </a>
+        //     </li>
+        //   `;
+
+        //   html += '</ul>';
+        //   container.innerHTML = html;
+        // }
 
         async function addToCart(productId) {
             try {
@@ -247,14 +329,5 @@
           position: relative;
         }
 
-        .cart-count {
-          position: absolute;
-          top: 0;
-          right: 0;
-          background-color: red;
-          color: white;
-          border-radius: 50%;
-          padding: 2px 6px;
-          font-size: 12px;
-        }
+        
       </style>

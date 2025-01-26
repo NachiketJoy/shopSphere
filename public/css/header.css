@@ -4,17 +4,40 @@
 
 nav.admin-nav {
   box-shadow: none;
+  font-family: Arial Black, Helvetica, sans-serif;
 }
 
 .nav ul a {
   font-size: 13px;
   text-decoration: none;
   color: var(--info);
+  font-family: Arial Black, Helvetica, sans-serif;
+}
+
+.nav ul a span{
+  font-family: Arial Black, Helvetica, sans-serif;
 }
 
 .nav .brand-logo {
   color: var(--info);
+  font-family: Arial Black, Helvetica, sans-serif;
 }
+
+.cart-count {
+  top: 0;
+  right: 0;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+.btn-floating .add_button{
+  font-size: 1rem;
+  text-align: left;
+  margin-left: 3px;
+ }
 
 .sidenav {
   margin-top: 60px;

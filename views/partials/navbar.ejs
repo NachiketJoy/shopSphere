@@ -1,7 +1,12 @@
 <div class="navbar-fixed">
   <nav class="nav">
     <div class="container nav-wrapper">
-      <a href="#!" class="brand-logo">Logo</a>
+      <img
+        src="/icon.png"
+        height="60"
+        alt="ShopSphere Logo"
+      />
+      <span class="brand-logo">ShopSphere</span>
       <% if(user.email === 'admin@example.com') { %>
         <ul class=" right nav-items">
           <li><a href="/dashboard">Dashboard</a></li>
@@ -11,21 +16,25 @@
           <ul class="right nav-items">
             <li><a href="/homepage">Home</a></li>
             <li><a href="/account">Account</a></li>
-            <li><a href="/contact">Contact Us</a></li>
+            <li><a href="/contact">Contact</a></li>
+          
+            <!-- Notifications dropdown with dynamic count -->
             <li class="notifications-dropdown">
               <a href="#!" class="dropdown-trigger" data-target="notifications-dropdown">
-                <i class="material-icons">notifications</i>
-                <span class="notification-count">0</span>
+                Notifications
+                <span class="cart-count">0</span> <!-- Dynamic notification count -->
               </a>
-              <ul id="notifications-dropdown" class="dropdown-content">
-              </ul>
             </li>
+
+              <!-- Shopping cart with dynamic count -->
             <li>
               <a href="/cart" class="cart-button">
-                <i class="material-icons">shopping_cart</i>
-                <span class="cart-count">0</span>
+                Shopping Cart
+                <span class="cart-count">0</span> <!-- Dynamic cart item count -->
               </a>
             </li>
+            
+           
             <li><a href="#"><%- user.fullName %></a></li>
             <li><button id="logout" class="btn btn__primary">Logout</button></li>
           </ul>

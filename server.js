@@ -62,5 +62,6 @@ initializeSocket(io);
 
 httpServer.listen(port, () => {
   console.log("App listening to: " + port);
+  console.log(`Server is running on http://localhost:${port}`)
 });
 module.exports = { io, app, httpServer };

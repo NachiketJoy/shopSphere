@@ -1,4 +1,4 @@
-  <footer id="footer" class="page-footer">
+  <!-- <footer id="footer" class="page-footer">
     <div class="container">
       <div class="row">
         <div class="col l6 s12">
@@ -6,7 +6,7 @@
           <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
         </div>
         <div class="col l4 offset-l2 s12">
-          <h5 class="white-text">Links</h5>
+          <h5 class="white-text">About Us</h5>
           <ul>
             <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
             <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
@@ -22,10 +22,93 @@
       <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
       </div>
     </div>
+  </footer> -->
+
+  
+  <footer id="footer" class="page-footer">
+    <div class="footer-description">
+      <p>
+        ShopSphere provides a seamless shopping experience, bringing you the best products with ease and convenience. 
+      </p>
+      <p>
+        Your one-stop shop for quality, reliability, and simplicity.
+      </p>
+      <ul class="social-buttons">
+        <li>
+          <a
+            href="/"
+            class="icon-white me-2"
+            target="_blank"
+            aria-label="facebook social link"
+          >
+            <span class="fab fa-facebook"></span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://github.com/NachiketJoy/shopSphere"
+            aria-label="github social link"
+            class="icon-white me-2"
+            target="_blank"
+          >
+            <span class="fab fa-github"></span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="/"
+            class="icon-white me-2"
+            aria-label="linkedin social link"
+            target="_blank"
+          >
+            <span class="fab fa-linkedin"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  
+    <hr />
+
+    <!-- Copyright and Logo -->
+    <div class="footer_bar">
+      <a href="/" class="footer-link">
+        <img
+          src="/icon.png" 
+          height="30"
+          class="me-2"
+          alt="Logo"
+        />
+        <p>ShopSphere</p>
+      </a>
+    </div>
+    <div class="footer-text">
+      <p>&copy; copyright 2025.</p>
+    </div>
+    <!-- Last update date -->
+    <div class="footer-text">
+      <strong>Last Updated:</strong> <span id="last-updated"></span>
+    </div>
+
+      
   </footer>
+  
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
   <script src="/node_modules/materialize-css/dist/js/materialize.min.js"></script>
   <script src="/dist/js/scripts.min.js"></script>
-</body>
-</html>
+  <script>
+
+    // Function to format the date
+    function formatDate(date) {
+      return date.toLocaleDateString() + ' ' + 'at' + ' ' + date.toLocaleTimeString();
+    }
+
+    // Update the last updated time on page load
+    window.onload = function () {
+      const lastUpdatedElement = document.getElementById('last-updated');
+      const lastUpdatedDate = new Date(document.lastModified);
+      lastUpdatedElement.textContent = formatDate(lastUpdatedDate);
+    };
+
+  </script>
+  

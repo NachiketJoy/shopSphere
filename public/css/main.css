@@ -115,3 +115,180 @@ a:active {
     z-index: 5;
   }
 }
+
+/* footer */
+#footer {
+  margin-top: 250px;
+  height: 400px;
+  background-color: #333;
+  color: white; 
+  text-align: center;
+  padding: 50px; /* 添加内边距 */
+  position: relative; 
+  width: 100%;
+}
+
+.footer_bar {
+  display: flex;              
+  justify-content: center;   
+  align-items: center;      
+  margin: 2rem 0;       
+}
+
+.footer_bar a {
+  display: flex;              
+  align-items: center;       
+  justify-content: center;   
+}
+
+.footer_bar a p{
+  font-size: 1.5rem;    
+}
+
+.footer_bar img {
+  margin-right: 10px;       
+}
+
+.footer-text {
+  text-align: center;    
+  margin-top: 1rem;         
+  color: white;          
+}
+
+.footer-text strong {
+  font-weight: bold;        
+}
+
+#last-updated {
+  font-style: italic;       
+}
+
+
+.footer-link {
+  color: white;            
+  font-weight: bold;       
+  font-size: 2rem;        
+  text-decoration: none;    
+}
+
+.footer-link:hover {
+  color: white;            
+  text-decoration: none;   
+}
+
+
+.footer-description {
+  text-align: center; 
+  margin-bottom: 30px; 
+}
+
+.footer-description p {
+  font-size: 1.1rem; 
+  margin-bottom: 1rem; 
+  line-height: 1.6; 
+  color: white; 
+  font-family: Georgia, 'Times New Roman', Times, serif
+}
+
+.social-buttons {
+  display: flex; 
+  justify-content: center; 
+  list-style: none; 
+  padding: 0; 
+  margin: 0; 
+}
+
+.social-buttons li {
+  margin: 0 10px; 
+}
+
+.social-buttons a {
+  font-size: 1.5rem; 
+  color: white; 
+  text-decoration: none;
+  transition: transform 0.3s ease; 
+}
+
+.social-buttons a:hover {
+  transform: scale(1.2); 
+}
+
+
+/* pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 50px 0;
+}
+
+.pagination li {
+  margin: 0 5px;
+}
+
+.pagination li a {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 4px;
+  color: #17a2b8;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.pagination li a:hover {
+  background-color: #f1f1f1;
+}
+
+.pagination li.active a {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.pagination li.disabled a {
+  color: #ccc;
+  pointer-events: none;
+}
+
+
+#pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 50px;
+}
+
+.pagination-jump {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto; 
+  width: 200px;
+}
+
+
+.pagination-jump input {
+  width: 50px;
+  margin-left: 5px;
+  padding: 5px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.pagination-jump button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination-jump button:hover {
+  background-color: #17a2b8;
+}

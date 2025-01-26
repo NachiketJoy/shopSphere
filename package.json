@@ -1,5 +1,5 @@
 {
-  "name": "jwtauth",
+  "name": "sit725-2024-t3-group-project",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "SIT725 group project - e-commerce platform",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
