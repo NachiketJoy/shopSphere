@@ -1,131 +1,133 @@
-<%- include('./layout/header') %>
-  <%- include('./partials/navbar') %>
+<%- include('./layout/header') %> <%- include('./partials/navbar') %>
 
-  <div class="loader-content">
-    <div class="loader"></div>
+<div class="loader-content">
+  <div class="loader"></div>
+</div>
+
+<div class="container homepage" id="container">
+  <div class="banner">
+    <img class="banner-img" src="/assets/img/banner.jpg" alt="" />
   </div>
-  
-    <div class="container homepage" id="container">
-      <h2>Homepage</h2>
 
-      <div class="row">
-        <div class="col s12">
-          <div class="card">
-            <div class="card-content">
-              <form id="searchForm">
-                <div class="input-field">
-                  <input type="text" id="search" name="search">
-                  <label for="search">Search products</label>
-                </div>
-
-                <div class="input-field">
-                  <select id="retailer" name="retailer">
-                    <option value="">All Retailers</option>
-                    <option value="Amazon">Amazon</option>
-                    <option value="Walmart">Walmart</option>
-                    <option value="Target">Target</option>
-                    <option value="Best Buy">Best Buy</option>
-                    <option value="Costco">Costco</option>
-                    <option value="ebay">eBay</option>
-                    <option value="Newegg">Newegg</option>
-                    <option value="Home Depot">Home Depot</option>
-                    <option value="Macy's">Macy's</option>
-                    <option value="PetSmart">PetSmart</option>
-                  </select>
-                  <label>Filter by Retailer</label>
-                </div>
-
-                <div class="input-field">
-                  <select id="sortBy" name="sortBy">
-                    <option value="">Sort By</option>
-                    <option value="price">Price</option>
-                    <option value="quantity">Quantity</option>
-                  </select>
-                  <label>Sort By</label>
-                </div>
-
-                <div class="input-field">
-                  <select id="order" name="order">
-                    <option value="asc">Ascending</option>
-                    <option value="desc">Descending</option>
-                  </select>
-                  <label>Order</label>
-                </div>
-
-                <button class="btn waves-effect waves-light" type="submit">
-                  <i class="material-icons">Search</i>
-                </button>
-              </form>
-            </div>
-          </div>
+  <div class="search-container">
+    <div class="search-content">
+      <form id="searchForm" class="search-form">
+        <div class="input-field">
+          <input type="text" id="search" name="search" />
+          <label for="search">Search products</label>
         </div>
-      </div>
 
-      <div class="row" id="productsContainer">
-      </div>
+        <div class="input-field">
+          <select id="retailer" name="retailer">
+            <option value="">All Retailers</option>
+            <option value="Amazon">Amazon</option>
+            <option value="Walmart">Walmart</option>
+            <option value="Target">Target</option>
+            <option value="Best Buy">Best Buy</option>
+            <option value="Costco">Costco</option>
+            <option value="ebay">eBay</option>
+            <option value="Newegg">Newegg</option>
+            <option value="Home Depot">Home Depot</option>
+            <option value="Macy's">Macy's</option>
+            <option value="PetSmart">PetSmart</option>
+          </select>
+          <label>Filter by Retailer</label>
+        </div>
 
-      <div class="row">
-        <div class="center-align" id="pagination"></div>
-      </div>
+        <div class="input-field">
+          <select id="sortBy" name="sortBy">
+            <option value="">Sort By</option>
+            <option value="price">Price</option>
+            <option value="quantity">Quantity</option>
+          </select>
+          <label>Sort By</label>
+        </div>
+
+        <div class="input-field">
+          <select id="order" name="order">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+          <label>Order</label>
+        </div>
+
+        <button class="btn btn__primary" type="submit">
+          <i class="material-icons">Search</i>
+        </button>
+      </form>
     </div>
+  </div>
 
-    <%- include('./layout/footer') %>
+  <div class="row" id="productsContainer"></div>
 
-      <script>
-        document.addEventListener('DOMContentLoaded', function () {
-          updateCartCount();
+  <div class="row">
+    <div class="center-align" id="pagination"></div>
+  </div>
+</div>
 
-          var elems = document.querySelectorAll('select');
-          M.FormSelect.init(elems);
+<%- include('./layout/footer') %>
 
-          fetchProducts();
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    updateCartCount();
 
-          document.getElementById('searchForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            fetchProducts();
-          });
-        });
+    var elems = document.querySelectorAll("select");
+    M.FormSelect.init(elems);
 
-        async function fetchProducts(page = 1) {
-          try {
-            const search = document.getElementById('search').value;
-            const retailer = document.getElementById('retailer').value;
-            const sortBy = document.getElementById('sortBy').value;
-            const order = document.getElementById('order').value;
+    fetchProducts();
 
-            const queryParams = new URLSearchParams({
-              search,
-              retailer,
-              sortBy,
-              order,
-              page,
-              limit: 10
-            });
+    document
+      .getElementById("searchForm")
+      .addEventListener("submit", function (e) {
+        e.preventDefault();
+        fetchProducts();
+      });
+  });
 
-            const response = await fetch(`/products?${queryParams}`);
-            const data = await response.json();
+  async function fetchProducts(page = 1) {
+    try {
+      const search = document.getElementById("search").value;
+      const retailer = document.getElementById("retailer").value;
+      const sortBy = document.getElementById("sortBy").value;
+      const order = document.getElementById("order").value;
 
-            if (data.success) {
-              displayProducts(data.data);
-              displayPagination(data.pagination);
-            } else {
-              M.toast({ html: 'Error loading products' });
-            }
-          } catch (error) {
-            console.error('Error:', error);
-            M.toast({ html: 'Error loading products' });
-          }
-        }
+      const queryParams = new URLSearchParams({
+        search,
+        retailer,
+        sortBy,
+        order,
+        page,
+        limit: 10,
+      });
 
-        function displayProducts(products) {
-          const container = document.getElementById('productsContainer');
-          container.innerHTML = products.map(product => `
+      const response = await fetch(`/products?${queryParams}`);
+      const data = await response.json();
+
+      if (data.success) {
+        displayProducts(data.data);
+        displayPagination(data.pagination);
+      } else {
+        M.toast({ html: "Error loading products" });
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      M.toast({ html: "Error loading products" });
+    }
+  }
+
+  function displayProducts(products) {
+    const container = document.getElementById("productsContainer");
+    container.innerHTML = products
+      .map(
+        (product) => `
           <div class="col s12 m6 l4">
             <div class="card">
               <div class="card-image">
-                <img src="${product.image || 'https://placehold.co/600x400'}">
+                <img src="${product.image || "https://placehold.co/600x400"}">
                 <span class="card-title">${product.name}</span>
-                <a class="btn-floating halfway-fab waves-effect waves-light red" onclick="addToCart('${product._id}')">
+                <a class="btn-floating halfway-fab waves-effect waves-light red" onclick="addToCart('${
+                  product._id
+                }')">
                   <i class="add_button">Add</i>
                 </a>
               </div>
@@ -137,47 +139,56 @@
               </div>
             </div>
           </div>
-        `).join('');
-        }
+        `
+      )
+      .join("");
+  }
 
-        
+  function displayPagination(pagination) {
+    const container = document.getElementById("pagination");
 
-        function displayPagination(pagination) {
-          const container = document.getElementById('pagination');
-
-        
-          let html = `
+    let html = `
             <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
           `;
 
-          // Pagination 
-          html += '<ul class="pagination">';
+    // Pagination
+    html += '<ul class="pagination">';
 
-          // chevron-left
-          html += `
-            <li class="${pagination.currentPage === 1 ? 'disabled' : ''}">
-              <a href="#!" onclick="${pagination.currentPage > 1 ? `fetchProducts(${pagination.currentPage - 1})` : ''}">
+    // chevron-left
+    html += `
+            <li class="${pagination.currentPage === 1 ? "disabled" : ""}">
+              <a href="#!" onclick="${
+                pagination.currentPage > 1
+                  ? `fetchProducts(${pagination.currentPage - 1})`
+                  : ""
+              }">
                 <i class="fas fa-chevron-left"></i>
               </a>
             </li>
           `;
 
-          // pages
-          const visiblePages = 5; // 每次显示的最大页码数
-          const startPage = Math.max(1, pagination.currentPage - Math.floor(visiblePages / 2));
-          const endPage = Math.min(pagination.totalPages, startPage + visiblePages - 1);
+    // pages
+    const visiblePages = 5; // 每次显示的最大页码数
+    const startPage = Math.max(
+      1,
+      pagination.currentPage - Math.floor(visiblePages / 2)
+    );
+    const endPage = Math.min(
+      pagination.totalPages,
+      startPage + visiblePages - 1
+    );
 
-          for (let i = startPage; i <= endPage; i++) {
-            html += `
-              <li class="${pagination.currentPage === i ? 'active' : ''}">
+    for (let i = startPage; i <= endPage; i++) {
+      html += `
+              <li class="${pagination.currentPage === i ? "active" : ""}">
                 <a href="#!" onclick="fetchProducts(${i})">${i}</a>
               </li>
             `;
-          }
+    }
 
-          // ... and the last page
-          if (endPage < pagination.totalPages) {
-            html += `
+    // ... and the last page
+    if (endPage < pagination.totalPages) {
+      html += `
               <li class="disabled">
                 <a href="#!">...</a>
               </li>
@@ -185,21 +196,27 @@
                 <a href="#!" onclick="fetchProducts(${pagination.totalPages})">${pagination.totalPages}</a>
               </li>
             `;
-          }
+    }
 
-          // chevron-right
-          html += `
-            <li class="${pagination.currentPage === pagination.totalPages ? 'disabled' : ''}">
-              <a href="#!" onclick="${pagination.currentPage < pagination.totalPages ? `fetchProducts(${pagination.currentPage + 1})` : ''}">
+    // chevron-right
+    html += `
+            <li class="${
+              pagination.currentPage === pagination.totalPages ? "disabled" : ""
+            }">
+              <a href="#!" onclick="${
+                pagination.currentPage < pagination.totalPages
+                  ? `fetchProducts(${pagination.currentPage + 1})`
+                  : ""
+              }">
                 <i class="fas fa-chevron-right"></i>
               </a>
             </li>
           `;
 
-          html += '</ul>'; // 结束 Pagination 的 ul
+    html += "</ul>"; // 结束 Pagination 的 ul
 
-          // Pagination Jump 部分
-          html += `
+    // Pagination Jump 部分
+    html += `
             <div class="pagination-jump">
               <label for="jumpPage">Go to page:</label>
               <input type="number" id="jumpPage" min="1" max="${pagination.totalPages}" value="${pagination.currentPage}">
@@ -207,127 +224,117 @@
             </div>
           `;
 
-          html += '</div>'; // 结束父容器的 div
+    html += "</div>"; // 结束父容器的 div
 
-          // 将生成的 HTML 插入容器
-          container.innerHTML = html;
-        }
+    // 将生成的 HTML 插入容器
+    container.innerHTML = html;
+  }
 
-        function jumpToPage(totalPages) {
-          const pageInput = document.getElementById('jumpPage');
-          const pageNumber = parseInt(pageInput.value, 10);
+  function jumpToPage(totalPages) {
+    const pageInput = document.getElementById("jumpPage");
+    const pageNumber = parseInt(pageInput.value, 10);
 
-          if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
-            fetchProducts(pageNumber);
-          } else {
-            alert('Please enter a valid page number.');
-          }
-        }
+    if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
+      fetchProducts(pageNumber);
+    } else {
+      alert("Please enter a valid page number.");
+    }
+  }
 
-        // function displayPagination(pagination) {
-        //   const container = document.getElementById('pagination');
-        //   let html = '<ul class="pagination">';
+  // function displayPagination(pagination) {
+  //   const container = document.getElementById('pagination');
+  //   let html = '<ul class="pagination">';
 
-        //   html += `
-        //     <li class="${pagination.currentPage === 1 ? 'disabled' : 'waves-effect'}">
-        //       <a href="#!" onclick="fetchProducts(${pagination.currentPage - 1})">
-        //         <i class="material-icons">←</i>
-        //       </a>
-        //     </li>
-        //   `;
+  //   html += `
+  //     <li class="${pagination.currentPage === 1 ? 'disabled' : 'waves-effect'}">
+  //       <a href="#!" onclick="fetchProducts(${pagination.currentPage - 1})">
+  //         <i class="material-icons">←</i>
+  //       </a>
+  //     </li>
+  //   `;
 
-        //   for (let i = 1; i <= pagination.totalPages; i++) {
-        //     html += `
-        //       <li class="${pagination.currentPage === i ? 'active' : 'waves-effect'}">
-        //         <a href="#!" onclick="fetchProducts(${i})">${i}</a>
-        //       </li>
-        //     `;
-        //   }
+  //   for (let i = 1; i <= pagination.totalPages; i++) {
+  //     html += `
+  //       <li class="${pagination.currentPage === i ? 'active' : 'waves-effect'}">
+  //         <a href="#!" onclick="fetchProducts(${i})">${i}</a>
+  //       </li>
+  //     `;
+  //   }
 
-        //   html += `
-        //     <li class="${pagination.currentPage === pagination.totalPages ? 'disabled' : 'waves-effect'}">
-        //       <a href="#!" onclick="fetchProducts(${pagination.currentPage + 1})">
-        //         <i class="material-icons">chevron_right</i>
-        //       </a>
-        //     </li>
-        //   `;
+  //   html += `
+  //     <li class="${pagination.currentPage === pagination.totalPages ? 'disabled' : 'waves-effect'}">
+  //       <a href="#!" onclick="fetchProducts(${pagination.currentPage + 1})">
+  //         <i class="material-icons">chevron_right</i>
+  //       </a>
+  //     </li>
+  //   `;
 
-        //   html += '</ul>';
-        //   container.innerHTML = html;
-        // }
+  //   html += '</ul>';
+  //   container.innerHTML = html;
+  // }
 
-        async function addToCart(productId) {
-            try {
-              const response = await fetch('/cart/add', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ productId })
-              });
+  async function addToCart(productId) {
+    try {
+      const response = await fetch("/cart/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId }),
+      });
 
-              const data = await response.json();
-              if (data.success) {
-                M.toast({ html: 'Item added to cart' });
-                updateCartCount();
-              }
-            } catch (error) {
-              M.toast({ html: 'Error adding item to cart' });
-            }
-          }
+      const data = await response.json();
+      if (data.success) {
+        M.toast({ html: "Item added to cart" });
+        updateCartCount();
+      }
+    } catch (error) {
+      M.toast({ html: "Error adding item to cart" });
+    }
+  }
 
-          async function updateCartCount() {
-              try {
-                const response = await fetch('/cart/items');
-                const data = await response.json();
+  async function updateCartCount() {
+    try {
+      const response = await fetch("/cart/items");
+      const data = await response.json();
 
-                if (data.success) {
-                  const totalItems = data.cartItems.reduce((sum, item) => sum + item.quantity, 0);
-                  document.querySelector('.cart-count').textContent = totalItems;
-                }
-              } catch (error) {
-                console.error('Error updating cart count:', error);
-              }
-            }
-      </script>
+      if (data.success) {
+        const totalItems = data.cartItems.reduce(
+          (sum, item) => sum + item.quantity,
+          0
+        );
+        document.querySelector(".cart-count").textContent = totalItems;
+      }
+    } catch (error) {
+      console.error("Error updating cart count:", error);
+    }
+  }
+</script>
 
-      <style>
-        .card .card-content .price {
-          font-weight: bold;
-          color: #26a69a;
-        }
+<style>
+  .card .card-content {
+    height: 152px;
+  }
 
-        .card .card-content .quantity {
-          color: #666;
-        }
+  .card .card-content .price {
+    font-weight: bold;
+    color: #26a69a;
+  }
 
-        .card .card-content .retailer {
-          font-style: italic;
-          color: #999;
-        }
+  .card .card-content .quantity {
+    color: #666;
+  }
 
-        .pagination {
-          margin-top: 20px;
-        }
+  .card .card-content .retailer {
+    font-style: italic;
+    color: #999;
+  }
 
-        #searchForm {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 20px;
-        }
+  .pagination {
+    margin-top: 20px;
+  }
 
-        #searchForm .input-field {
-          margin: 10px;
-          min-width: 200px;
-        }
-
-        #searchForm button {
-          margin-top: 20px;
-        }
-
-        .cart-button {
-          position: relative;
-        }
-
-        
-      </style>
+  .cart-button {
+    position: relative;
+  }
+</style>

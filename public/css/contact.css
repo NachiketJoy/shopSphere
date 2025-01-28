@@ -30,7 +30,7 @@
   .contact-container form label {
     font-size: 14px;
     font-weight: bold;
-    color: var(--text-dark);
+    color: var(--dark);
   }
   
   .contact-container form input,
