@@ -50,10 +50,10 @@ app.use("/", cartRoutes);
 app.use("/", orderRoutes);
 
 io.on("connection", (socket) => {
-  console.log("Client connected");
+  // console.log("Client connected");
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected");
+    // console.log("Client disconnected");
   });
 });
 

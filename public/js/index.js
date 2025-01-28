@@ -11,9 +11,13 @@ window.addEventListener('DOMContentLoaded', function () {
     const toastSuccess = document.getElementById('toast__success');
     const toastError = document.getElementById('toast_error');
 
+    document.getElementById('year').textContent = new Date().getFullYear();
+
     window.addEventListener('load', () => {
+        document.body.style.overflow = 'hidden';
         setTimeout(() => {
             document.querySelector('.loader-content').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }, 2000);
     });
 

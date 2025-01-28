@@ -70,45 +70,21 @@
     <hr />
 
     <!-- Copyright and Logo -->
-    <div class="footer_bar">
-      <a href="/" class="footer-link">
+    <div class="footer-copyright">
+      <a href="/homepage" class="footer-logo">
         <img
-          src="/icon.png" 
+          src="/assets/img/icon.png" 
           height="30"
-          class="me-2"
           alt="Logo"
         />
-        <p>ShopSphere</p>
+        <span>ShopSphere</span>
       </a>
+      <p>&copy; copyright <span id="year"></span></p>
     </div>
-    <div class="footer-text">
-      <p>&copy; copyright 2025.</p>
-    </div>
-    <!-- Last update date -->
-    <div class="footer-text">
-      <strong>Last Updated:</strong> <span id="last-updated"></span>
-    </div>
-
-      
   </footer>
   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
   <script src="/node_modules/materialize-css/dist/js/materialize.min.js"></script>
   <script src="/dist/js/scripts.min.js"></script>
-  <script>
-
-    // Function to format the date
-    function formatDate(date) {
-      return date.toLocaleDateString() + ' ' + 'at' + ' ' + date.toLocaleTimeString();
-    }
-
-    // Update the last updated time on page load
-    window.onload = function () {
-      const lastUpdatedElement = document.getElementById('last-updated');
-      const lastUpdatedDate = new Date(document.lastModified);
-      lastUpdatedElement.textContent = formatDate(lastUpdatedDate);
-    };
-
-  </script>
   

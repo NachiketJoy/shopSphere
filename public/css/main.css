@@ -8,7 +8,7 @@
   --warning: #ffc107;
   --white: #fff;
   --info: #17a2b8;
-  --text-dark: #343a40;
+  --dark: #343a40;
   --text-muted: #6c757d;
   --background: #f4f4f4;
   --background-gradient: linear-gradient(to right, var(--background), #c0bcbc);
@@ -116,103 +116,6 @@ a:active {
   }
 }
 
-/* footer */
-#footer {
-  margin-top: 250px;
-  height: 400px;
-  background-color: #333;
-  color: white; 
-  text-align: center;
-  padding: 50px; /* 添加内边距 */
-  position: relative; 
-  width: 100%;
-}
-
-.footer_bar {
-  display: flex;              
-  justify-content: center;   
-  align-items: center;      
-  margin: 2rem 0;       
-}
-
-.footer_bar a {
-  display: flex;              
-  align-items: center;       
-  justify-content: center;   
-}
-
-.footer_bar a p{
-  font-size: 1.5rem;    
-}
-
-.footer_bar img {
-  margin-right: 10px;       
-}
-
-.footer-text {
-  text-align: center;    
-  margin-top: 1rem;         
-  color: white;          
-}
-
-.footer-text strong {
-  font-weight: bold;        
-}
-
-#last-updated {
-  font-style: italic;       
-}
-
-
-.footer-link {
-  color: white;            
-  font-weight: bold;       
-  font-size: 2rem;        
-  text-decoration: none;    
-}
-
-.footer-link:hover {
-  color: white;            
-  text-decoration: none;   
-}
-
-
-.footer-description {
-  text-align: center; 
-  margin-bottom: 30px; 
-}
-
-.footer-description p {
-  font-size: 1.1rem; 
-  margin-bottom: 1rem; 
-  line-height: 1.6; 
-  color: white; 
-  font-family: Georgia, 'Times New Roman', Times, serif
-}
-
-.social-buttons {
-  display: flex; 
-  justify-content: center; 
-  list-style: none; 
-  padding: 0; 
-  margin: 0; 
-}
-
-.social-buttons li {
-  margin: 0 10px; 
-}
-
-.social-buttons a {
-  font-size: 1.5rem; 
-  color: white; 
-  text-decoration: none;
-  transition: transform 0.3s ease; 
-}
-
-.social-buttons a:hover {
-  transform: scale(1.2); 
-}
-
 
 /* pagination */
 .pagination {
@@ -252,7 +155,6 @@ a:active {
   pointer-events: none;
 }
 
-
 #pagination {
   display: flex;
   justify-content: center;
@@ -265,10 +167,9 @@ a:active {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: auto; 
+  margin-left: auto;
   width: 200px;
 }
-
 
 .pagination-jump input {
   width: 50px;
@@ -291,4 +192,98 @@ a:active {
 
 .pagination-jump button:hover {
   background-color: #17a2b8;
+}
+
+/* Banner */
+.banner {
+  position: relative;
+  width: 100%;
+  height: 51vh;
+  margin-bottom: 20px;
+}
+
+.banner-img {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.search-container {
+  background-color: var(--background);
+  margin-bottom: 20px;
+}
+
+.search-content {
+  padding: 0;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  color: var(--primary);
+}
+
+/* loader content */
+.loader-content {
+  height: 100vh;
+  z-index: 9;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--background);
+}
+
+.loader {
+  width: 90px;
+  height: 14px;
+  box-shadow: 0 3px 0 var(--primary);
+  position: relative;
+  clip-path: inset(-40px 0 -5px);
+}
+.loader:before {
+  content: "";
+  position: absolute;
+  inset: auto calc(50% - 17px) 0;
+  height: 50px;
+  --g: no-repeat linear-gradient(var(--primary) 0 0);
+  background: var(--g), var(--g), var(--g), var(--g);
+  background-size: 16px 14px;
+  animation: l7-1 2s infinite linear, l7-2 2s infinite linear;
+}
+@keyframes l7-1 {
+  0%,
+  100% {
+    background-position: 0 -50px, 100% -50px;
+  }
+  17.5% {
+    background-position: 0 100%, 100% -50px, 0 -50px, 100% -50px;
+  }
+  35% {
+    background-position: 0 100%, 100% 100%, 0 -50px, 100% -50px;
+  }
+  52.5% {
+    background-position: 0 100%, 100% 100%, 0 calc(100% - 16px), 100% -50px;
+  }
+  70%,
+  98% {
+    background-position: 0 100%, 100% 100%, 0 calc(100% - 16px),
+      100% calc(100% - 16px);
+  }
+}
+@keyframes l7-2 {
+  0%,
+  70% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(200%);
+  }
 }

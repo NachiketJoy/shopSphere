@@ -13,40 +13,38 @@ function fetchProducts() {
             }
 
             // Populate DataTable with fetched product data
-            if(Array.isArray(data)) {
-                data.forEach(product => {
-                    const row = [
-                        product._id,
-                        product.description,
-                        product.category,
-                        product.price,
-                        product.quantity,
-                        product.retailer,
-                        `<a href="/products/${product._id}/edit" class="btn btn-primary">Edit</a>
-                         <button class="btn btn-danger" onclick="deleteProduct('${product._id}')">Delete</button>`
-                    ];
-    
-                    // Add row to DataTable
-                    if (dataTableInstance) {
-                        dataTableInstance.row.add(row);
-                    } else {
-                        const newRow = document.createElement('tr');
-                        newRow.innerHTML = `
-                            <td>${product._id}</td>
-                            <td>${product.description}</td>
-                            <td>${product.category}</td>
-                            <td>${product.price}</td>
-                            <td>${product.quantity}</td>
-                            <td>${product.retailer}</td>
-                            <td>
-                                <a href="/products/${product._id}/edit" class="btn btn-primary">Edit</a>
-                                <button class="btn btn-danger" onclick="deleteProduct('${product._id}')">Delete</button>
-                            </td>
-                        `;
-                        productsTableBody.appendChild(newRow);
-                    }
-                });
-            }
+            data.data.forEach(product => {
+                const row = [
+                    product._id,
+                    product.description,
+                    product.category,
+                    product.price,
+                    product.quantity,
+                    product.retailer,
+                    `<a href="/products/${product._id}/edit" class="btn btn-primary">Edit</a>
+                     <button class="btn btn-danger" onclick="deleteProduct('${product._id}')">Delete</button>`
+                ];
+
+                // Add row to DataTable
+                if (dataTableInstance) {
+                    dataTableInstance.row.add(row);
+                } else {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${product._id}</td>
+                        <td>${product.description}</td>
+                        <td>${product.category}</td>
+                        <td>${product.price}</td>
+                        <td>${product.quantity}</td>
+                        <td>${product.retailer}</td>
+                        <td>
+                            <a href="/products/${product._id}/edit" class="btn btn-primary">Edit</a>
+                            <button class="btn btn-danger" onclick="deleteProduct('${product._id}')">Delete</button>
+                        </td>
+                    `;
+                    productsTableBody.appendChild(newRow);
+                }
+            });
 
             if (dataTableInstance) {
                 dataTableInstance.draw();
@@ -125,15 +123,6 @@ function fetchOrders() {
                     `;
                     ordersTableBody.appendChild(row);
                 });
-
-                $('#ordersTable').DataTable({
-                    paging: true,
-                    searching: true,
-                    ordering: true,
-                    info: true,
-                    pageLength: 8
-                });
-                
             } else {
                 console.error('Expected an array of orders, but got:', data);
             }
