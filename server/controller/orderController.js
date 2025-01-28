@@ -10,6 +10,7 @@ const setIO = (_io) => {
   io = _io;
 };
 
+// Create a new order controller
 exports.createOrder = async (req, res) => {
   try {
     const { cardNumber, expiryDate, cvv, shippingAddress } = req.body;
@@ -147,61 +148,10 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-exports.cancelOrder = async (req, res) => {
-  try {
-    const order = await Order.findOne({
-      _id: req.params.orderId,
-      userId: req.user._id,
-      status: "pending",
-    }).populate("orderItems.productId");
-
-    if (!order) {
-      return res
-        .status(404)
-        .json({ message: "Order not found or cannot be cancelled" });
-    }
-
-    // Restore product quantities
-    for (const item of order.orderItems) {
-      await Product.findByIdAndUpdate(item.productId._id, {
-        $inc: { quantity: item.quantity },
-      });
-    }
-
-    // Clear the timeout
-    if (global.orderTimeouts[order._id]) {
-      clearTimeout(global.orderTimeouts[order._id]);
-      delete global.orderTimeouts[order._id];
-    }
-
-    await Order.findByIdAndDelete(order._id);
-
-    // Emit cancellation events
-    io.of(`/order/${order._id}`).emit("statusUpdate", {
-      status: "cancelled",
-      orderId: order._id,
-      timestamp: new Date(),
-    });
-
-    io.emit("notification", {
-      type: "order",
-      status: "cancelled",
-      orderId: order._id,
-      message: `Order #${order._id} has been cancelled`,
-      timestamp: new Date(),
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Order cancelled successfully",
-    });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
+// Get order status
 exports.getOrderStatus = async (req, res) => {
   try {
+    // Retrieves the current status of a specific order for the authenticated user
     const order = await Order.findOne({
       _id: req.params.orderId,
       userId: req.user._id,
@@ -211,6 +161,7 @@ exports.getOrderStatus = async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
+    // Returns order status and timestamps for ordered, shipped, and delivered events
     res.status(200).json({
       success: true,
       status: order.status,
@@ -223,8 +174,12 @@ exports.getOrderStatus = async (req, res) => {
   }
 };
 
+// Get all orders made my the authenticated user
 exports.getAllOrders = async (req, res) => {
   try {
+    // Retrieves all orders for the authenticated user
+    // Returns orders sorted by creation date (newest first)
+    // Includes detailed product information for each order item
     const orders = await Order.find({ userId: req.user._id })
       .populate("orderItems.productId")
       .sort({ createdAt: -1 });
@@ -238,14 +193,18 @@ exports.getAllOrders = async (req, res) => {
   }
 };
 
+// Get all orders (admin only)
 exports.allOrders = async (req, res) => {
   try {
     const admin_login_email = process.env.ADMIN_LOGIN_EMAIL;
 
+    // Validates admin access using environment variables
     const users = await Auth.find();
     const adminUser = users.find((user) => user.email === admin_login_email);
     const isAdmin = adminUser.email === req.user.email;
 
+    // Admin-only endpoint to retrieve all orders in the system
+    // Includes: User's address and full name, product's name and price
     const orders = await Order.find()
       .populate({
         path: "orderItems.productId",
