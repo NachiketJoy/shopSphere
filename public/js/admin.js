@@ -15,7 +15,7 @@ function fetchProducts() {
             // Populate DataTable with fetched product data
             data.data.forEach(product => {
                 const row = [
-                    product._id,
+                    product.name,
                     product.description,
                     product.category,
                     product.price,
@@ -31,7 +31,7 @@ function fetchProducts() {
                 } else {
                     const newRow = document.createElement('tr');
                     newRow.innerHTML = `
-                        <td>${product._id}</td>
+                        <td>${product.name}</td>
                         <td>${product.description}</td>
                         <td>${product.category}</td>
                         <td>${product.price}</td>
@@ -93,9 +93,9 @@ function fetchOrders() {
 
             if (Array.isArray(data)) {
                 data.forEach(order => {
-
-                    const userAddress = order.userId ? `${order.userId.address.street}, ${order.userId.address.city}, ${order.userId.address.country}` : 'N/A';
-                    const userFullName = order.userId && order.userId.authId ? order.userId.authId.fullName : 'N/A';
+               
+                    const userAddress = order.userId ? `${order.shippingAddress.street}, ${order.shippingAddress.city}, ${order.shippingAddress.country}` : 'N/A';
+                    const userFullName = order.userId && order.userId._id ? order.userId.fullName : 'N/A';
                     const totalAmount = order.totalAmount;
                     const status = order.status;
                     const orderDate = new Date(order.orderedAt).toLocaleDateString();
