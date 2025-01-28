@@ -5,7 +5,7 @@ const orderSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Auth",
       required: true,
     },
     orderItems: [
@@ -59,3 +59,12 @@ const orderSchema = new Schema(
 );
 
 module.exports = mongoose.model("Order", orderSchema);
+
+// .populate({
+//   path: "userId",
+//   select: "address",
+//   populate: {
+//     path: "authId",
+//     select: "fullName",
+//   },
+// })

@@ -241,23 +241,21 @@ exports.getAllOrders = async (req, res) => {
 exports.allOrders = async (req, res) => {
   try {
     const admin_login_email = process.env.ADMIN_LOGIN_EMAIL;
-    const orders = await Order.find()
-      .populate({
-        path: "userId",
-        select: "address",
-        populate: {
-          path: "authId",
-          select: "fullName",
-        },
-      })
-      .populate({
-        path: "orderItems.productId",
-        select: "name price",
-      });
 
     const users = await Auth.find();
     const adminUser = users.find((user) => user.email === admin_login_email);
     const isAdmin = adminUser.email === req.user.email;
+
+    const orders = await Order.find()
+      .populate({
+        path: "orderItems.productId",
+        select: "name price",
+      })
+      .populate({
+        path: "userId",
+        select: "fullName",
+      });
+
     if (isAdmin) {
       res.json(orders);
     } else {
