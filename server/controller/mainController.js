@@ -3,20 +3,28 @@ const Order = require("../models/orderModels");
 
 // Handle the user account page
 exports.account = async (req, res) => {
-  try {
-    // Retrieves the user's information
-    const user = req.user;
+    try {
+        // Retrieves the user's information
+        const user = req.user;
+        res.render("account", { title: "Account", user });
+    } catch (err) {
+        console.error("Error rendering account:", err);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
 
-    // Orders are populated with product details and sorted by date (newest first)
-    const orders = await Order.find({ userId: req.user._id })
-      .populate("orderItems.productId")
-      .sort({ orderedAt: -1 });
-
-    res.render("account", { title: "Account", user, orders });
-  } catch (err) {
-    console.error("Error rendering account:", err);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
+exports.order = async (req, res) => {
+    try {
+        const user = req.user;
+        // Orders are populated with product details and sorted by date (newest first)
+        const orders = await Order.find({ userId: req.user._id })
+        .populate("orderItems.productId")
+        .sort({ orderedAt: -1 });
+        res.render("order", { title: "Order History", user, orders });
+    } catch (err) {
+        console.error("Error rendering account:", err);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
 };
 
 // Fetch all users for admin dashboard

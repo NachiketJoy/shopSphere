@@ -1,12 +1,13 @@
 <div class="navbar-fixed">
   <nav class="nav">
     <div class="container nav-wrapper">
+      <a href="/homepage" class="brand-logo">
       <img
-        src="/icon.png"
+        src="/assets/img/icon.png"
         height="60"
         alt="ShopSphere Logo"
       />
-      <span class="brand-logo">ShopSphere</span>
+      <span class="brand-logo">ShopSphere</span></a>
       <% if(user.email === 'admin@example.com') { %>
         <ul class=" right nav-items">
           <li><a href="/dashboard">Dashboard</a></li>
@@ -15,7 +16,7 @@
         <% } else { %>
           <ul class="right nav-items">
             <li><a href="/homepage">Home</a></li>
-            <li><a href="/account">Account</a></li>
+            <li><a href="/order">Order</a></li>
             <li><a href="/contact">Contact</a></li>
           
             <!-- Notifications dropdown with dynamic count -->
@@ -35,7 +36,7 @@
             </li>
             
            
-            <li><a href="#"><%- user.fullName %></a></li>
+            <li><a href="/account"><%- user.fullName %></a></li>
             <li><button id="logout" class="btn btn__primary">Logout</button></li>
           </ul>
           <% } %>

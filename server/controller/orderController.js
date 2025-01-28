@@ -197,26 +197,24 @@ exports.getAllOrders = async (req, res) => {
 exports.allOrders = async (req, res) => {
   try {
     const admin_login_email = process.env.ADMIN_LOGIN_EMAIL;
-    // Admin-only endpoint to retrieve all orders in the system
-    // Includes: User's address and full name, product's name and price
-    const orders = await Order.find()
-      .populate({
-        path: "userId",
-        select: "address",
-        populate: {
-          path: "authId",
-          select: "fullName",
-        },
-      })
-      .populate({
-        path: "orderItems.productId",
-        select: "name price",
-      });
 
     // Validates admin access using environment variables
     const users = await Auth.find();
     const adminUser = users.find((user) => user.email === admin_login_email);
     const isAdmin = adminUser.email === req.user.email;
+
+    // Admin-only endpoint to retrieve all orders in the system
+    // Includes: User's address and full name, product's name and price
+    const orders = await Order.find()
+      .populate({
+        path: "orderItems.productId",
+        select: "name price",
+      })
+      .populate({
+        path: "userId",
+        select: "fullName",
+      });
+
     if (isAdmin) {
       res.json(orders);
     } else {

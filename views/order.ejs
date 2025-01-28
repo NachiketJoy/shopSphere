@@ -1,0 +1,49 @@
+<%- include('./layout/header') %> <%- include('./partials/navbar') %>
+
+<div class="container" id="container">
+  <h2>Order History</h2>
+  <div id="ordersList">
+    <% if (orders && orders.length> 0) { %> <% orders.forEach(order=> { %>
+    <div class="order-card">
+      <div class="order-header">
+        <h5>Order #<%- order._id %></h5>
+        <span class="order-status <%- order.status %>"
+          ><%- order.status %></span
+        >
+      </div>
+      <div class="order-details">
+        <p>Ordered on: <%- new Date(order.orderedAt).toLocaleDateString() %></p>
+        <p>Total Amount: $<%- order.totalAmount %></p>
+        <div class="order-items">
+          <% order.orderItems.forEach(item=> { %>
+          <div class="order-item">
+            <img
+              src="<%- item.productId.image || 'https://placehold.co/100x100' %>"
+              alt="<%- item.productId.name %>"
+            />
+            <div class="item-info">
+              <p><%- item.productId.name %></p>
+              <p>Quantity: <%- item.quantity %></p>
+              <p>Price: $<%- item.price %></p>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+        <div class="shipping-address">
+          <h6>Shipping Address:</h6>
+          <p><%- order.shippingAddress.street %></p>
+          <p>
+            <%- order.shippingAddress.city %>, <%-
+            order.shippingAddress.postalCode %>
+          </p>
+          <p><%- order.shippingAddress.country %></p>
+        </div>
+      </div>
+    </div>
+    <% }) %> <% } else { %>
+    <p>No orders found</p>
+    <% } %>
+  </div>
+</div>
+
+<%- include('./layout/footer') %>
