@@ -123,6 +123,15 @@ function fetchOrders() {
                     `;
                     ordersTableBody.appendChild(row);
                 });
+
+                new DataTable('#ordersTable', {
+                    paging: true,
+                    searching: true,
+                    ordering: true,
+                    info: true,
+                    pageLength: 8,
+                });
+
             } else {
                 console.error('Expected an array of orders, but got:', data);
             }
