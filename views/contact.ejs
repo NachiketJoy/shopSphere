@@ -1,16 +1,24 @@
 <%- include('./layout/header') %> 
 <%- include('./partials/navbar') %>
 
+<% if (messages.success && messages.success.length > 0) { %>
+    <div id="toast__success" data-message="<%= messages.success %>"></div>
+<% } %>
+
+<% if (messages.error && messages.error.length > 0) { %>
+      <div id="toast_error" data-message="<%= messages.error %>"></div>
+<% } %>
+
     <div class="contact-container">
         <h1>Contact Us</h1>
         <p>Need to get in touch with us?</p>
 
-        <form action="/" method="POST">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" placeholder="Enter your name" value="<%= user?.fullName || '' %>" aria-label="Name" aria-required="true" required>
+        <form action="/contact-us" method="POST">
+            <label for="contact_name">Name</label>
+            <input readonly type="text" id="contact_name" name="contact_name" placeholder="Enter your name" value="<%= user?.fullName || '' %>" aria-label="Name" aria-required="true" required>
 
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email" value="<%= user?.email || '' %>" aria-label="Email" aria-required="true" required>
+            <input readonly type="email" id="email" name="email" placeholder="Enter your email" value="<%= user?.email || '' %>" aria-label="Email" aria-required="true" required>
 
             <label for="message">Message</label>
             <textarea id="message" name="message" placeholder="Enter your message" aria-required="true" required></textarea>
