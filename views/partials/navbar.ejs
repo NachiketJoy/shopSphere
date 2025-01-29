@@ -23,7 +23,7 @@
             <li class="notifications-dropdown">
               <a href="#!" class="dropdown-trigger" data-target="notifications-dropdown">
                 Notifications
-                <span class="cart-count">0</span> <!-- Dynamic notification count -->
+                <span class="notification-count">0</span> <!-- Dynamic notification count -->
               </a>
             </li>
 
@@ -43,3 +43,9 @@
     </div>
   </nav>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    updateCartCount();
+  });
+</script>

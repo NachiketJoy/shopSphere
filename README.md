@@ -1,4 +1,3 @@
-# shopSphere
 
 # SIT725 Group Project
 - Term: T3/2024
