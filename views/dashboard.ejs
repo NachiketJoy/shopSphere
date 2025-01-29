@@ -5,85 +5,91 @@
   <div class="loader"></div>
 </div>
 
-<div class="container" id="dashboard">
-  <div class="tabcontent" id="user" style="display:block">
-    <h2>Users</h2>
-    <p>List of Users</p>
-  
-    <table class="table" id="userTable">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% users.forEach(function(user) { %>
-          <% if (user.email !== 'admin@example.com') { %>
+<div class="dashboard-wrapper">
+  <div class="sidebar-placeholder"></div> 
+
+  <div class="container" id="dashboard">
+    <div class="tabcontent" id="user" style="display:block">
+      <h2>Users</h2>
+      <p>List of Users</p>
+    
+      <table class="table" id="userTable">
+        <thead>
           <tr>
-            <td><%= user.fullName %></td>
-            <td><%= user.email %></td>
-            <td>
-              <a href="/user/<%= user._id %>/block" class="btn <%= user.isBlocked ? 'btn-success' : 'btn-warning' %>">
-                  <%= user.isBlocked ? 'Unblock' : 'Block' %>
-                </a>
-              <a href="/user/<%= user._id %>/delete" class="btn btn-danger">Delete</a>
-            </td>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
           </tr>
-          <% } %>
-        <% }) %>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="tabcontent" id="product" style="display:none">
-    <h2>Products</h2>
-    <p>List of products</p>
-    <table class="table" id="productsTable">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Category</th>
-          <th>Price</th>
-          <th>Quantity</th>
-          <th>Retailer</th>
-          <th>Action</th>
+        </thead>
+        <tbody>
+          <% users.forEach(function(user) { %>
+            <% if (user.email !== 'admin@example.com') { %>
+            <tr>
+              <td><%= user.fullName %></td>
+              <td><%= user.email %></td>
+              <td>
+                <a href="/user/<%= user._id %>/block" class="btn <%= user.isBlocked ? 'btn-success' : 'btn-warning' %>">
+                    <%= user.isBlocked ? 'Unblock' : 'Block' %>
+                  </a>
+                <a href="/user/<%= user._id %>/delete" class="btn btn-danger">Delete</a>
+              </td>
+            </tr>
+            <% } %>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  
+    <div class="tabcontent" id="product" style="display:none">
+      <h2>Products</h2>
+      <p>List of products</p>
+      <table class="table" id="productsTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Retailer</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="productsTableBody">
+          
+        </tbody>
+      </table>
+    </div>
+  
+    <div class="tabcontent" id="order" style="display:none">
+      <h2>Order</h2>
+      <p>List of Orders</p>
+      <table class="table" id="ordersTable">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Address</th>
+            <th>Order Items</th>
+            <th>Total Amount</th>
+            <th>Status</th>
+            <th>Order Date</th>
+            <th>Shipped Date</th>
+            <th>Delivered Date</th>
         </tr>
-      </thead>
-      <tbody id="productsTableBody">
-        
-      </tbody>
-    </table>
-  </div>
-
-  <div class="tabcontent" id="order" style="display:none">
-    <h2>Order</h2>
-    <p>List of Orders</p>
-    <table class="table" id="ordersTable">
-      <thead>
-        <tr>
-          <th>Customer</th>
-          <th>Address</th>
-          <th>Order Items</th>
-          <th>Total Amount</th>
-          <th>Status</th>
-          <th>Order Date</th>
-          <th>Shipped Date</th>
-          <th>Delivered Date</th>
-      </tr>
-  </thead>
-  <tbody id="ordersTableBody">
-
-  </tbody>
-    </table>
-  </div>
-
-  <div class="tabcontent" id="password" style="display:none">
-    <%- include('./partials/adminPassword', { message: message }) %>
+    </thead>
+    <tbody id="ordersTableBody">
+  
+    </tbody>
+      </table>
+    </div>
+  
+    <div class="tabcontent" id="password" style="display:none">
+      <%- include('./partials/adminPassword', { message: message }) %>
+    </div>
+  
   </div>
 
 </div>
+
 
 <%- include('./layout/footer') %>
