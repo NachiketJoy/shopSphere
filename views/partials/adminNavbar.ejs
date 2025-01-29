@@ -18,42 +18,29 @@
       <img class="profile__img" src="/assets/img/admin.jpg" />
       <p class="profile__title">Admin</p>
     </div>
-    <div class="divider"></div>
+
+    <div class="sidenav-title">Dashboard</div> 
     <ul class="sidenav-items">
-      <li>
-        <a><i class="material-icons">cloud</i>Dashboard</a>
-      </li>
+      
       <li class="active">
-        <a
-          href="#"
-          id="manageUser"
-          class="tablinks"
-          onclick="adminNav(event, 'user')"
-          ><i class="material-icons">cloud</i>Manage User</a
-        >
+        <a href="#" id="manageUser" class="tablinks" onclick="adminNav(event, 'user')">
+          <i class="fas fa-user-cog"></i> Manage User
+        </a>
       </li>
       <li>
-        <a
-          href="#"
-          id="manageProduct"
-          class="tablinks"
-          onclick="adminNav(event, 'product')"
-          ><i class="material-icons">cloud</i>Manage Product</a
-        >
+        <a href="#" id="manageProduct" class="tablinks" onclick="adminNav(event, 'product')">
+          <i class="fas fa-box-open"></i> Manage Product
+        </a>
       </li>
       <li>
-        <a
-          href="#"
-          id="viewOrder"
-          class="tablinks"
-          onclick="adminNav(event, 'order')"
-          ><i class="material-icons">cloud</i>Order</a
-        >
+        <a href="#" id="viewOrder" class="tablinks" onclick="adminNav(event, 'order')">
+          <i class="fas fa-shopping-cart"></i> Order
+        </a>
       </li>
       <li>
-        <a href="#" class="tablinks" onclick="adminNav(event, 'password')"
-          ><i class="material-icons">cloud</i>Update Password</a
-        >
+        <a href="#" class="tablinks" onclick="adminNav(event, 'password')">
+          <i class="fas fa-key"></i> Update Password
+        </a>
       </li>
     </ul>
   </div>
