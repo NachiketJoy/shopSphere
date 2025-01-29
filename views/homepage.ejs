@@ -168,7 +168,7 @@
           `;
 
     // pages
-    const visiblePages = 5; // 每次显示的最大页码数
+    const visiblePages = 5; // the max pages display
     const startPage = Math.max(
       1,
       pagination.currentPage - Math.floor(visiblePages / 2)
@@ -213,9 +213,9 @@
             </li>
           `;
 
-    html += "</ul>"; // 结束 Pagination 的 ul
+    html += "</ul>"; 
 
-    // Pagination Jump 部分
+    // Pagination Jump 
     html += `
             <div class="pagination-jump">
               <label for="jumpPage">Go to page:</label>
@@ -224,9 +224,8 @@
             </div>
           `;
 
-    html += "</div>"; // 结束父容器的 div
+    html += "</div>"; 
 
-    // 将生成的 HTML 插入容器
     container.innerHTML = html;
   }
 
@@ -240,38 +239,6 @@
       alert("Please enter a valid page number.");
     }
   }
-
-  // function displayPagination(pagination) {
-  //   const container = document.getElementById('pagination');
-  //   let html = '<ul class="pagination">';
-
-  //   html += `
-  //     <li class="${pagination.currentPage === 1 ? 'disabled' : 'waves-effect'}">
-  //       <a href="#!" onclick="fetchProducts(${pagination.currentPage - 1})">
-  //         <i class="material-icons">←</i>
-  //       </a>
-  //     </li>
-  //   `;
-
-  //   for (let i = 1; i <= pagination.totalPages; i++) {
-  //     html += `
-  //       <li class="${pagination.currentPage === i ? 'active' : 'waves-effect'}">
-  //         <a href="#!" onclick="fetchProducts(${i})">${i}</a>
-  //       </li>
-  //     `;
-  //   }
-
-  //   html += `
-  //     <li class="${pagination.currentPage === pagination.totalPages ? 'disabled' : 'waves-effect'}">
-  //       <a href="#!" onclick="fetchProducts(${pagination.currentPage + 1})">
-  //         <i class="material-icons">chevron_right</i>
-  //       </a>
-  //     </li>
-  //   `;
-
-  //   html += '</ul>';
-  //   container.innerHTML = html;
-  // }
 
   async function addToCart(productId) {
     try {
@@ -292,23 +259,7 @@
       M.toast({ html: "Error adding item to cart" });
     }
   }
-
-  async function updateCartCount() {
-    try {
-      const response = await fetch("/cart/items");
-      const data = await response.json();
-
-      if (data.success) {
-        const totalItems = data.cartItems.reduce(
-          (sum, item) => sum + item.quantity,
-          0
-        );
-        document.querySelector(".cart-count").textContent = totalItems;
-      }
-    } catch (error) {
-      console.error("Error updating cart count:", error);
-    }
-  }
+  
 </script>
 
 <style>

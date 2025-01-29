@@ -23,7 +23,7 @@ nav.admin-nav {
   font-family: Arial Black, Helvetica, sans-serif;
 }
 
-.cart-count {
+.cart-count, .notification-count {
   top: 0;
   right: 0;
   background-color: red;

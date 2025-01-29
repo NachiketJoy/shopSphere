@@ -14,12 +14,18 @@ window.addEventListener('DOMContentLoaded', function () {
     document.getElementById('year').textContent = new Date().getFullYear();
 
     window.addEventListener('load', () => {
-        document.body.style.overflow = 'hidden';
-        setTimeout(() => {
-            document.querySelector('.loader-content').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }, 2000);
+        const loader = document.querySelector('.loader-content');
+        if (loader) {
+            document.body.style.overflow = 'hidden'; 
+            setTimeout(() => {
+                loader.style.display = 'none';
+                document.body.style.overflow = 'auto'; 
+            }, 2000);
+        } else {
+            document.body.style.overflow = 'auto'; 
+        }
     });
+    
 
     if (toastSuccess !== null || toastError !== null) {
         if (toastSuccess) {
@@ -83,6 +89,23 @@ window.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
+async function updateCartCount() {
+    try {
+        const response = await fetch("/cart/items");
+        const data = await response.json();
+
+        if (data.success) {
+        const totalItems = data.cartItems.reduce(
+            (sum, item) => sum + item.quantity,
+            0
+        );
+        document.querySelector(".cart-count").textContent = totalItems;
+        }
+    } catch (error) {
+        console.error("Error updating cart count:", error);
+    }
+}
 
 function adminNav(evt, navItems) {
     var i, tabcontent, tablinks;
