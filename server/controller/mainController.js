@@ -1,5 +1,6 @@
 const Auth = require("../models/authModels");
 const Order = require("../models/orderModels");
+const mailTransporter = require('../middleware/emailService')
 
 // Handle the user account page
 exports.account = async (req, res) => {
@@ -84,9 +85,48 @@ exports.blockUser = async (req, res) => {
 exports.contact = async (req, res) => {
   try {
     const user = req.user;
-    res.render("contact", { title: "Contact", user });
+    const messages = {
+        success: req.flash('success') || null,
+        error: req.flash('error') || null
+    };
+
+    res.render("contact", { title: "Contact", user, messages });
   } catch (err) {
     console.error("Error rendering contact page:", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+// Send an email to the admin user when a user leaves a message
+exports.contactMsg = async (req, res) => {
+    const { contact_name, email, message } = req.body;
+    const admin_email = process.env.ADMIN_EMAIL;
+
+    // Send contact message to admin
+    try {
+        const mailOptions = {
+            from: email,
+            to: admin_email, 
+            subject: `Contact Form: ${contact_name}`,
+            text: `
+                Name: ${contact_name}
+                Email: ${email}
+                Message: ${message}
+            `
+        };
+
+        mailTransporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error);
+                res.status(500).send('Error sending email');
+            } else {
+                req.flash('success', 'Thank you for reaching out');
+                res.redirect('/contact')
+            }
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Something went wrong.');
+    }
+}

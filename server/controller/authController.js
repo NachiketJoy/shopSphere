@@ -1,7 +1,7 @@
 const Auth = require("../models/authModels");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
+const mailTransporter = require('../middleware/emailService')
 const crypto = require("crypto");
 
 /**
@@ -156,9 +156,6 @@ exports.forgotPassword = async (req, res) => {
 // Handles the password reset link request
 exports.sendResetLink = async (req, res) => {
   const { email } = req.body;
-  // Admin credentials for sending emails
-  const admin_email = process.env.ADMIN_EMAIL;
-  const admin_email_password = process.env.ADMIN_EMAIL_PASSWORD;
 
   try {
     // Check if user exists in database
@@ -180,17 +177,8 @@ exports.sendResetLink = async (req, res) => {
     // Create reset URL with token and email
     const resetUrl = `http://localhost:3000/reset-password?token=${resetToken}&email=${email}`;
 
-    // Configure email service using admin credentials
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: admin_email,
-        pass: admin_email_password,
-      },
-    });
-
     // Send reset email to user
-    await transporter.sendMail({
+    await mailTransporter.sendMail({
       to: email,
       subject: "ShopShere: Password Reset Request",
       text: `Click the following link to reset your password: ${resetUrl}`,
