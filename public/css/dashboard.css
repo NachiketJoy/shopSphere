@@ -1,60 +1,60 @@
 
 /* dashboard navbar */
 .sidenav-items {
-    overflow: hidden;
-    background-color: #f1f1f1;
-  }
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
 
-  .sidenav-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #ecf0f1;
-    text-transform: uppercase;
-    padding: 15px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-    text-align: center;
-    background-color: var(--info);
-    margin: 10px 0 3px 0;
-  }
-  .sidenav-items li a {
-    display: flex;
-    align-items: center;
-    padding: 12px 20px;
-    font-size: 16px;
-    text-decoration: none;
-    border-radius: 5px;
-  }
-  .sidenav-items li a i {
-    margin-right: 10px;
-  }
+.sidenav-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ecf0f1;
+  text-transform: uppercase;
+  padding: 15px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+  background-color: var(--info);
+  margin: 10px 0 3px 0;
+}
+.sidenav-items li a {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  font-size: 16px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+.sidenav-items li a i {
+  margin-right: 10px;
+}
 
-  .sidenav-items li:hover {
-    background: rgba(0, 0, 0, .05);
-  }
+.sidenav-items li:hover {
+  background: rgba(0, 0, 0, .05);
+}
 
-  .sidenav-items li a:hover {
-    background: none;
-  }
+.sidenav-items li a:hover {
+  background: none;
+}
 
-  .sidenav{
-    margin-top: 0;
-    padding-top: 100px;
-    z-index: -1;
-  }
+.sidenav{
+  margin-top: 0;
+  padding-top: 100px;
+  z-index: -1;
+}
 
-  /* dashboard content */
-  .dashboard-wrapper {
-    display: flex;
-    align-items: flex-start;
-  }
-  
-  .sidebar-placeholder {
-    width: 300px; 
-    flex-shrink: 0; 
-  }
+/* dashboard content */
+.dashboard-wrapper {
+  display: flex;
+  align-items: flex-start;
+}
 
-  .container {
-    flex-grow: 1; 
-    padding: 0 50px;
-    max-width: calc(100% - 300px); 
-  }
+.sidebar-placeholder {
+  width: 300px; 
+  flex-shrink: 0; 
+}
+
+.container {
+  flex-grow: 1; 
+  padding: 0 50px;
+  max-width: calc(100% - 300px); 
+}
