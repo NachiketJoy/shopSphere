@@ -26,7 +26,6 @@ nav.admin-nav {
 
 #userDropdownButton {
   font-weight: bold; 
-  /* color: azure; */
 }
 
 
@@ -150,42 +149,3 @@ nav.admin-nav {
   margin-left: 3px;
  }
 
-/* dashboard */
-.sidenav {
-  margin-top: 60px;
-  height: 100vh;
-  transform: translateX(0);
-  box-shadow: none;
-}
-
-.sidenav .profile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-.profile .profile__img {
-  width: 80px;
-}
-
-.profile .profile__title {
-  color: var(--text-muted)
-}
-
-.sidenav .divider {
-  margin: 20px 0;
-}
-
-.sidenav-items li {
-  background-color: var(--info);
-  margin-bottom: 3px;
-  padding: 0 20px;
-}
-
-.sidenav-items li a {
-  padding: 0;
-  height: auto;
-  line-height: normal;
-  display: flex;
-  align-items: center;
-}
