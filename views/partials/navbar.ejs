@@ -17,7 +17,6 @@
           <ul class="right nav-items">
             <li><a href="/homepage">Home</a></li>
             <li><a href="/order">Order</a></li>
-            <li><a href="/contact">Contact</a></li>
           
             <!-- Notifications dropdown with dynamic count -->
             <li class="notifications-dropdown">
@@ -35,9 +34,37 @@
               </a>
             </li>
             
-           
-            <li><a href="/account"><%- user.fullName %></a></li>
-            <li><button id="logout" class="btn btn__primary">Logout</button></li>
+
+            <!-- User dropdown -->
+            <li class="user-dropdown">
+              <button id="userDropdownButton" class="btn btn__primary"><%- user.fullName %></button>
+
+              <!-- User info popup -->
+              <div class="user-info-popup" id="userInfoPopup">
+
+                <div class="popup-header">
+                  <span class="popup-title">ShopSphere</span>
+                  <a href="/logout" class="logout-link">Log out</a>
+                </div>
+
+                <div class="user-details">
+                  <img src="/assets/img/admin.jpg" alt="User Profile" class="profile-image">
+                  <div class="user-text">
+                    <p class="user-name"><%- user.fullName %></p>
+                    <p class="user-email"><%- user.email %></p>
+                    <a href="/account" class="view-account">
+                      View Account
+                      <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    
+                  </div>
+                </div>
+                
+              </div>
+
+            </li>
+
+
           </ul>
           <% } %>
     </div>

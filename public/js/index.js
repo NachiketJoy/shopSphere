@@ -10,6 +10,8 @@ window.addEventListener('DOMContentLoaded', function () {
     const footer = document.getElementById('footer');
     const toastSuccess = document.getElementById('toast__success');
     const toastError = document.getElementById('toast_error');
+    const userDropdownButton = document.getElementById("userDropdownButton");
+    const userInfoPopup = document.getElementById("userInfoPopup");
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -86,6 +88,20 @@ window.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         document.getElementById("sign-in-form").style.display = "block";
         document.getElementById("forgot-password-container").style.display = "none";
+    });
+
+
+    // 点击按钮时切换弹出框显示
+    userDropdownButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        userInfoPopup.classList.toggle("active");
+    });
+
+    // 点击页面其他地方时关闭弹出框
+    document.addEventListener("click", (event) => {
+        if (!userInfoPopup.contains(event.target) && !userDropdownButton.contains(event.target)) {
+        userInfoPopup.classList.remove("active");
+        }
     });
 
 });
