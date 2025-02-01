@@ -91,18 +91,20 @@ window.addEventListener('DOMContentLoaded', function () {
     });
 
 
-    // 点击按钮时切换弹出框显示
-    userDropdownButton.addEventListener("click", (event) => {
-        event.preventDefault();
-        userInfoPopup.classList.toggle("active");
-    });
-
-    // 点击页面其他地方时关闭弹出框
-    document.addEventListener("click", (event) => {
-        if (!userInfoPopup.contains(event.target) && !userDropdownButton.contains(event.target)) {
-        userInfoPopup.classList.remove("active");
-        }
-    });
+    // Toggle pop up box
+    if (userDropdownButton && userInfoPopup) {
+        document.addEventListener("click", (e) => {
+            // Check if the click target is the user dropdown button
+            if (e.target === userDropdownButton) {
+                e.preventDefault();
+                userInfoPopup.classList.toggle("active");
+            } 
+            // Check if the click target is outside of the user info popup
+            else if (!userInfoPopup.contains(e.target)) {
+                userInfoPopup.classList.remove("active");
+            }
+        });
+    }
 
 });
 

@@ -258,7 +258,7 @@ exports.resetPassword = async (req, res) => {
 // Password Update Controller for admin only
 exports.updatePassword = async (req, res) => {
   // Extract old and new passwords from request body
-  const { oldPassword, newPassword } = req.body;
+  const { currentPassword, newPassword } = req.body;
   // Get admin user ID from the authenticated session
   const userId = req.user._id;
 
@@ -267,18 +267,16 @@ exports.updatePassword = async (req, res) => {
     const user = await Auth.findById(userId);
 
     // Compare the provided old password with the stored hashed password
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
-      // If passwords don't match, set error flash message
-      req.flash("message", "Current password is incorrect");
-      return res.redirect("/dashboard");
+      // If passwords don't match, set error message
+      return res.json({ success: false, message: "Current password is incorrect" });
     }
 
     // Check if old and new passwords are the same
-    if (oldPassword === newPassword) {
+    if (currentPassword === newPassword) {
       // Prevent using the same password
-      req.flash("message", "Your current password cannot be your new password");
-      return res.redirect("/dashboard");
+      return res.json({ success: false, message: "Your current password cannot be your new password" });
     }
 
     // Hash the new password before saving
@@ -287,9 +285,9 @@ exports.updatePassword = async (req, res) => {
     user.password = hashedNewPassword;
     await user.save();
     
-    // Set success flash message
-    req.flash("message", "Password updated successfully");
-    res.redirect("/dashboard");
+    // Set success message
+    return res.json({ success: true, message: "Password updated successfully" });
+
   } catch (err) {
     // Handle any errors during the process
     console.error(err);

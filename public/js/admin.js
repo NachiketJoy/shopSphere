@@ -1,4 +1,5 @@
 let dataTableInstance;
+const passwordUpdateForm = document.getElementById("passwordForm");
 
 function fetchProducts() {
     fetch('/products')
@@ -124,6 +125,10 @@ function fetchOrders() {
                     ordersTableBody.appendChild(row);
                 });
 
+                if ($.fn.dataTable.isDataTable('#ordersTable')) {
+                    $('#ordersTable').DataTable().destroy();
+                }
+
                 new DataTable('#ordersTable', {
                     paging: true,
                     searching: true,
@@ -138,3 +143,48 @@ function fetchOrders() {
         })
         .catch(error => console.error('Error loading orders:', error));
 }
+
+// Function to handle the update password form
+passwordUpdateForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // retrieve both password field value
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+
+    try {
+      const response = await fetch('/update-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ currentPassword, newPassword })
+      });
+
+      const data = await response.json();
+
+      // Get the status message element
+      const statusMessage = document.querySelector('.status-message');
+
+      if (data.success) {
+        // Update status message for success
+        statusMessage.textContent = data.message;
+        statusMessage.style.color = 'green';
+        document.getElementById('passwordForm').reset();
+      } else {
+        // Update status message for error
+        statusMessage.textContent = data.message || 'An error occurred. Please try again.';
+        statusMessage.style.color = 'red';
+      }
+
+      // Show the status message
+      statusMessage.style.display = 'block';
+
+    } catch (error) {
+      console.error('Error:', error);
+      const statusMessage = document.querySelector('.status-message');
+      statusMessage.textContent = 'Something went wrong. Please try again.';
+      statusMessage.style.color = 'red';
+      statusMessage.style.display = 'block';
+    }
+})
