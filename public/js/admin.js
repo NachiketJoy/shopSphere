@@ -1,94 +1,6 @@
 let dataTableInstance;
 const passwordUpdateForm = document.getElementById("passwordForm");
 
-// function fetchProducts() {
-//     fetch('/products')
-//         .then(response => response.json())
-//         .then(data => {
-//             const productsTableBody = document.getElementById('productsTableBody');
-//             productsTableBody.innerHTML = '';
- 
-//             // Clear previous DataTable data
-//             if (dataTableInstance) {
-//                 dataTableInstance.clear();
-//             }
- 
-//             // Populate DataTable with fetched product data
-//             data.data.forEach(product => {
-//                 const row = [
-//                     `<input type="text" class="form-control" value="${product.name}" data-field="name" data-id="${product._id}">`,
-//                     `<input type="text" class="form-control" value="${product.description}" data-field="description" data-id="${product._id}">`,
-//                     `<input type="text" class="form-control" value="${product.category}" data-field="category" data-id="${product._id}">`,
-//                     `<input type="number" class="form-control" value="${product.price}" data-field="price" data-id="${product._id}">`,
-//                     `<input type="number" class="form-control" value="${product.quantity}" data-field="quantity" data-id="${product._id}">`,
-//                     `<input type="text" class="form-control" value="${product.retailer}" data-field="retailer" data-id="${product._id}">`,
-//                     `<button class="btn btn-success save-btn" onclick="saveProductChanges('${product._id}')">Save</button>
-//                      <button class="btn btn-danger" onclick="deleteProduct('${product._id}')">Delete</button>`
-//                 ];
- 
-//                 // Add row to DataTable
-//                 if (dataTableInstance) {
-//                     dataTableInstance.row.add(row);
-//                 } else {
-//                     const newRow = document.createElement('tr');
-//                     newRow.innerHTML = `
-//                         <td><input type="text" class="form-control" value="${product.name}" data-field="name" data-id="${product._id}"></td>
-//                         <td><input type="text" class="form-control" value="${product.description}" data-field="description" data-id="${product._id}"></td>
-//                         <td><input type="text" class="form-control" value="${product.category}" data-field="category" data-id="${product._id}"></td>
-//                         <td><input type="number" class="form-control" value="${product.price}" data-field="price" data-id="${product._id}"></td>
-//                         <td><input type="number" class="form-control" value="${product.quantity}" data-field="quantity" data-id="${product._id}"></td>
-//                         <td><input type="text" class="form-control" value="${product.retailer}" data-field="retailer" data-id="${product._id}"></td>
-//                         <td>
-//                             <button class="btn btn-success save-btn" onclick="saveProductChanges('${product._id}')">Save</button>
-//                             <button class="btn btn-danger" onclick="deleteProduct('${product._id}')">Delete</button>
-//                         </td>
-//                     `;
-//                     productsTableBody.appendChild(newRow);
-//                 }
-//             });
- 
-//             if (dataTableInstance) {
-//                 dataTableInstance.draw();
-//             } else {
-//                 // Initialize DataTable if it's not already initialized
-//                 dataTableInstance = new DataTable('#productsTable', {
-//                     paging: true,
-//                     searching: true,
-//                     ordering: true,
-//                     info: true,
-//                     pageLength: 8,
-//                 });
-//             }
-//         })
-//         .catch(error => console.error('Error loading products:', error));
-// }
- 
-// function saveProductChanges(productId) {
-//     const row = document.querySelectorAll(`[data-id='${productId}']`);
-//     const updatedProduct = {};
- 
-//     row.forEach(cell => {
-//         const field = cell.getAttribute('data-field');
-//         const value = cell.value;
-//         updatedProduct[field] = value;
-//     });
- 
-//     // Send updated product data to the server
-//     fetch(`/products/${productId}`, {
-//         method: 'PUT',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(updatedProduct)
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         console.log('Product updated:', data);
-//         alert('Product updated successfully!');
-//     })
-//     .catch(error => console.error('Error saving product:', error));
-// }
-
 function fetchProducts() {
     fetch('/products')
         .then(response => response.json())
@@ -110,7 +22,7 @@ function fetchProducts() {
                     product.price,
                     product.quantity,
                     product.retailer,
-                    `<a href="/products/${product._id}/edit" class="btn btn-primary">Edit</a>
+                    `<button class="btn btn-primary" onclick="openEditModal('${product._id}')">Edit</button>
                      <button class="btn btn-danger" onclick="deleteProduct('${product._id}')">Delete</button>`
                 ];
 
@@ -127,7 +39,7 @@ function fetchProducts() {
                         <td>${product.quantity}</td>
                         <td>${product.retailer}</td>
                         <td>
-                            <a href="/products/${product._id}/edit" class="btn btn-primary">Edit</a>
+                            <button class="btn btn-primary" onclick="openEditModal('${product._id}')">Edit</button>
                             <button class="btn btn-danger" onclick="deleteProduct('${product._id}')">Delete</button>
                         </td>
                     `;
@@ -150,6 +62,122 @@ function fetchProducts() {
         })
         .catch(error => console.error('Error loading products:', error));
 }
+
+
+// Open Add Product Modal
+document.getElementById('addProductBtn').addEventListener('click', function () {
+    // Clear the form fields before opening the modal
+    document.getElementById('addProductName').value = '';
+    document.getElementById('addProductDescription').value = '';
+    document.getElementById('addProductCategory').value = '';
+    document.getElementById('addProductPrice').value = '';
+    document.getElementById('addProductQuantity').value = '';
+    document.getElementById('addProductRetailer').value = '';
+
+    // Update Materialize input fields
+    M.updateTextFields();
+
+    // Open the modal
+    const addModal = M.Modal.getInstance(document.getElementById('addProductModal'));
+    addModal.open();
+});
+// Add Product Form Submit
+document.getElementById('addProductForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    // Get form data
+    const newProduct = {
+        name: document.getElementById('addProductName').value,
+        description: document.getElementById('addProductDescription').value,
+        category: document.getElementById('addProductCategory').value,
+        price: parseFloat(document.getElementById('addProductPrice').value),
+        quantity: parseInt(document.getElementById('addProductQuantity').value, 10),
+        retailer: document.getElementById('addProductRetailer').value,
+    };
+
+    // Send POST request to add product
+    fetch('/products', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newProduct),
+    })
+        .then((response) => {
+            if (response.ok) {
+                // Close modal and refresh products list
+                const modal = M.Modal.getInstance(document.getElementById('addProductModal'));
+                modal.close();
+                fetchProducts(); // Refresh product list
+            } else {
+                console.error('Failed to add product');
+            }
+        })
+        .catch((error) => console.error('Error adding product:', error));
+});
+// Open Edit Product Modal
+function openEditModal(productId) {
+    fetch(`/products/${productId}`)
+        .then((response) => response.json())
+        .then((product) => {
+
+            // Populate modal fields with product data
+            document.getElementById('productName').value = product.data.name;
+            document.getElementById('productDescription').value = product.data.description;
+            document.getElementById('productCategory').value = product.data.category;
+            document.getElementById('productPrice').value = product.data.price;
+            document.getElementById('productQuantity').value = product.data.quantity;
+            document.getElementById('productRetailer').value = product.data.retailer;
+
+            // Save productId in a hidden input or globally
+            document.getElementById('editProductForm').dataset.productId = productId;
+
+            // Update Materialize input fields
+            M.updateTextFields();
+
+            // Open the modal
+            const editModal  = M.Modal.getInstance(document.getElementById('editProductModal'));
+            editModal .open();
+        })
+        .catch((error) => console.error('Error fetching product details:', error));
+}
+// Edit Product Form Submit
+document.getElementById('editProductForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    // Get the productId from the form's dataset
+    const productId = this.dataset.productId;
+
+    // Get form data
+    const updatedProduct = {
+        name: document.getElementById('productName').value,
+        description: document.getElementById('productDescription').value,
+        category: document.getElementById('productCategory').value,
+        price: parseFloat(document.getElementById('productPrice').value),
+        quantity: parseInt(document.getElementById('productQuantity').value, 10),
+        retailer: document.getElementById('productRetailer').value,
+    };
+
+    // Send update request
+    fetch(`/products/${productId}/edit`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedProduct),
+    })
+    .then((response) => {
+        if (response.ok) {
+        // Close modal and refresh products list
+        const modal = M.Modal.getInstance(document.getElementById('editProductModal'));
+        modal.close();
+        fetchProducts();
+        } else {
+        console.error('Failed to update product');
+        }
+    })
+    .catch((error) => console.error('Error updating product:', error));
+});
 
 // Function to handle the delete operation
 async function deleteProduct(id) {
