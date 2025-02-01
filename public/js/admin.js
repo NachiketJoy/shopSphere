@@ -1,6 +1,94 @@
 let dataTableInstance;
 const passwordUpdateForm = document.getElementById("passwordForm");
 
+// function fetchProducts() {
+//     fetch('/products')
+//         .then(response => response.json())
+//         .then(data => {
+//             const productsTableBody = document.getElementById('productsTableBody');
+//             productsTableBody.innerHTML = '';
+ 
+//             // Clear previous DataTable data
+//             if (dataTableInstance) {
+//                 dataTableInstance.clear();
+//             }
+ 
+//             // Populate DataTable with fetched product data
+//             data.data.forEach(product => {
+//                 const row = [
+//                     `<input type="text" class="form-control" value="${product.name}" data-field="name" data-id="${product._id}">`,
+//                     `<input type="text" class="form-control" value="${product.description}" data-field="description" data-id="${product._id}">`,
+//                     `<input type="text" class="form-control" value="${product.category}" data-field="category" data-id="${product._id}">`,
+//                     `<input type="number" class="form-control" value="${product.price}" data-field="price" data-id="${product._id}">`,
+//                     `<input type="number" class="form-control" value="${product.quantity}" data-field="quantity" data-id="${product._id}">`,
+//                     `<input type="text" class="form-control" value="${product.retailer}" data-field="retailer" data-id="${product._id}">`,
+//                     `<button class="btn btn-success save-btn" onclick="saveProductChanges('${product._id}')">Save</button>
+//                      <button class="btn btn-danger" onclick="deleteProduct('${product._id}')">Delete</button>`
+//                 ];
+ 
+//                 // Add row to DataTable
+//                 if (dataTableInstance) {
+//                     dataTableInstance.row.add(row);
+//                 } else {
+//                     const newRow = document.createElement('tr');
+//                     newRow.innerHTML = `
+//                         <td><input type="text" class="form-control" value="${product.name}" data-field="name" data-id="${product._id}"></td>
+//                         <td><input type="text" class="form-control" value="${product.description}" data-field="description" data-id="${product._id}"></td>
+//                         <td><input type="text" class="form-control" value="${product.category}" data-field="category" data-id="${product._id}"></td>
+//                         <td><input type="number" class="form-control" value="${product.price}" data-field="price" data-id="${product._id}"></td>
+//                         <td><input type="number" class="form-control" value="${product.quantity}" data-field="quantity" data-id="${product._id}"></td>
+//                         <td><input type="text" class="form-control" value="${product.retailer}" data-field="retailer" data-id="${product._id}"></td>
+//                         <td>
+//                             <button class="btn btn-success save-btn" onclick="saveProductChanges('${product._id}')">Save</button>
+//                             <button class="btn btn-danger" onclick="deleteProduct('${product._id}')">Delete</button>
+//                         </td>
+//                     `;
+//                     productsTableBody.appendChild(newRow);
+//                 }
+//             });
+ 
+//             if (dataTableInstance) {
+//                 dataTableInstance.draw();
+//             } else {
+//                 // Initialize DataTable if it's not already initialized
+//                 dataTableInstance = new DataTable('#productsTable', {
+//                     paging: true,
+//                     searching: true,
+//                     ordering: true,
+//                     info: true,
+//                     pageLength: 8,
+//                 });
+//             }
+//         })
+//         .catch(error => console.error('Error loading products:', error));
+// }
+ 
+// function saveProductChanges(productId) {
+//     const row = document.querySelectorAll(`[data-id='${productId}']`);
+//     const updatedProduct = {};
+ 
+//     row.forEach(cell => {
+//         const field = cell.getAttribute('data-field');
+//         const value = cell.value;
+//         updatedProduct[field] = value;
+//     });
+ 
+//     // Send updated product data to the server
+//     fetch(`/products/${productId}`, {
+//         method: 'PUT',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(updatedProduct)
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log('Product updated:', data);
+//         alert('Product updated successfully!');
+//     })
+//     .catch(error => console.error('Error saving product:', error));
+// }
+
 function fetchProducts() {
     fetch('/products')
         .then(response => response.json())
