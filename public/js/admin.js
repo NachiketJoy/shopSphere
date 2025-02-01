@@ -63,6 +63,79 @@ function fetchProducts() {
         .catch(error => console.error('Error loading products:', error));
 }
 
+  
+document.addEventListener('DOMContentLoaded', function () {
+    const categories = [
+        "Technology",
+        "Clothing",
+        "Food",
+        "Home & Garden",
+        "Sports & Outdoors",
+        "Books",
+        "Beauty & Health",
+        "Toys & Games",
+        "Automotive",
+        "Pet Supplies",
+    ];
+
+    const retailers = [
+        "Amazon",
+        "Walmart",
+        "Target",
+        "Best Buy",
+        "Costco",
+        "eBay",
+        "Newegg",
+        "Home Depot",
+        "Macy's",
+        "PetSmart",
+    ];
+        // Initialize modals
+        const addModal = document.getElementById('addProductModal');
+        const editModal = document.getElementById('editProductModal');
+        M.Modal.init(addModal);
+        M.Modal.init(editModal);
+
+        // Populate category/retailer select dropdowns
+        const addCategorySelect = document.getElementById('addProductCategory');
+        const editCategorySelect = document.getElementById('productCategory');
+        const addRetailerSelect = document.getElementById('addProductRetailer');
+        const editRetailerSelect = document.getElementById('productRetailer');
+
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+
+            // Add to both dropdowns
+            addCategorySelect.appendChild(option.cloneNode(true));
+            editCategorySelect.appendChild(option.cloneNode(true));
+        });
+
+        retailers.forEach(retailer => {
+            const option = document.createElement('option');
+            option.value = retailer;
+            option.textContent = retailer;
+    
+            addRetailerSelect.appendChild(option.cloneNode(true));
+            editRetailerSelect.appendChild(option.cloneNode(true));
+        });
+
+        // Initialize Materialize select
+        M.FormSelect.init(addCategorySelect);
+        M.FormSelect.init(editCategorySelect);
+        M.FormSelect.init(addRetailerSelect);
+        M.FormSelect.init(editRetailerSelect);
+
+        
+        const selects = document.querySelectorAll('select');
+        M.FormSelect.init(selects, {
+            dropdownOptions: {
+                constrainWidth: true, 
+                container: document.body, // Attach the dropdown to the body to avoid going beyond the modal
+            },
+        });
+});
 
 // Open Add Product Modal
 document.getElementById('addProductBtn').addEventListener('click', function () {
