@@ -107,49 +107,6 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    // Initialize modals
-    const categories = [
-        "Technology",
-        "Clothing",
-        "Food",
-        "Home & Garden",
-        "Sports & Outdoors",
-        "Books",
-        "Beauty & Health",
-        "Toys & Games",
-        "Automotive",
-        "Pet Supplies",
-    ];
-    const addModal = document.getElementById('addProductModal');
-    const editModal = document.getElementById('editProductModal');
-    M.Modal.init(addModal);
-    M.Modal.init(editModal);
-
-    // Populate category select dropdowns
-    const addCategorySelect = document.getElementById('addProductCategory');
-    const editCategorySelect = document.getElementById('productCategory');
-
-    categories.forEach(category => {
-        const option = document.createElement('option');
-        option.value = category;
-        option.textContent = category;
-
-        // Add to both dropdowns
-        addCategorySelect.appendChild(option.cloneNode(true));
-        editCategorySelect.appendChild(option.cloneNode(true));
-    });
-
-    // Initialize Materialize select
-    M.FormSelect.init(addCategorySelect);
-    M.FormSelect.init(editCategorySelect);
-
-    const selects = document.querySelectorAll('select');
-    M.FormSelect.init(selects, {
-        dropdownOptions: {
-            constrainWidth: true, 
-            container: document.body, // Attach the dropdown to the body to avoid going beyond the modal
-        },
-    });
 
 
 });
