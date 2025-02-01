@@ -46,7 +46,10 @@
     <div class="tabcontent" id="product" style="display:none">
       <div class="products-container">
         <h2>Products</h2>
-        <p>List of products</p>
+        <p>
+          List of products  
+          <button class="btn waves-effect waves-light red" id="addProductBtn">Add</button>
+        </p>
         <table class="table" id="productsTable">
           <thead>
             <tr>
@@ -63,8 +66,85 @@
             
           </tbody>
         </table>
+
       </div>
-      
+
+      <!-- Add Product Modal -->
+      <div id="addProductModal" class="modal">
+        <div class="modal-content">
+          <h4>Add Product</h4>
+          <form id="addProductForm">
+            <div class="input-field">
+              <input type="text" id="addProductName" name="name" required />
+              <label for="addProductName">Name</label>
+            </div>
+            <div class="input-field">
+              <input type="text" id="addProductDescription" name="description" required />
+              <label for="addProductDescription">Description</label>
+            </div>
+            <div class="input-field">
+              <select id="addProductCategory" name="category" required>
+                <option value="" disabled selected>Choose a category</option>
+              </select>
+              <label for="addProductCategory">Category</label>
+            </div>
+            <div class="input-field">
+              <input type="number" id="addProductPrice" name="price" required />
+              <label for="addProductPrice">Price</label>
+            </div>
+            <div class="input-field">
+              <input type="number" id="addProductQuantity" name="quantity" required />
+              <label for="addProductQuantity">Quantity</label>
+            </div>
+            <div class="input-field">
+              <input type="text" id="addProductRetailer" name="retailer" required />
+              <label for="addProductRetailer">Retailer</label>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn waves-effect waves-light green">Add</button>
+              <a href="#!" class="modal-close btn waves-effect waves-light red">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- Edit Product Modal -->
+      <div id="editProductModal" class="modal">
+        <div class="modal-content">
+          <h4>Edit Product</h4>
+          <form id="editProductForm">
+            <div class="input-field">
+              <input type="text" id="productName" name="name" required />
+              <label for="productName">Name</label>
+            </div>
+            <div class="input-field">
+              <input type="text" id="productDescription" name="description" required />
+              <label for="productDescription">Description</label>
+            </div>
+            <div class="input-field">
+              <select id="productCategory" name="category" required>
+                <option value="" disabled selected>Choose a category</option>
+              </select>
+              <label for="productCategory">Category</label>
+            </div>
+            <div class="input-field">
+              <input type="number" id="productPrice" name="price" required />
+              <label for="productPrice">Price</label>
+            </div>
+            <div class="input-field">
+              <input type="number" id="productQuantity" name="quantity" required />
+              <label for="productQuantity">Quantity</label>
+            </div>
+            <div class="input-field">
+              <input type="text" id="productRetailer" name="retailer" required />
+              <label for="productRetailer">Retailer</label>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn waves-effect waves-light green">Save</button>
+              <a href="#!" class="modal-close btn waves-effect waves-light red">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   
     <div class="tabcontent" id="order" style="display:none">

@@ -12,7 +12,7 @@ router.get("/products/:id", productController.getProductById);
 router.post("/products", productController.createProduct);
 
 // Update product by id
-router.put("/products/:id", productController.updateProduct);
+router.put("/products/:id/edit", productController.updateProduct);
 
 // Delete product by id
 router.delete("/products/:id/delete", productController.deleteProduct);
