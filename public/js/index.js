@@ -79,7 +79,7 @@ window.addEventListener('DOMContentLoaded', () => {
             footer.style.display = 'none';
 
             if (currentPage === '/dashboard') {
-                manageProductBtn.addEventListener('click', fetchProducts);
+                manageProductBtn.addEventListener('click', adminFetchProducts);
                 viewOrderBtn.addEventListener('click', fetchOrders);
                 adminModal(categories, retailers);
             }
@@ -161,13 +161,17 @@ async function updateCartCount() {
     try {
         const response = await fetch("/cart/items");
         const data = await response.json();
+        const cartCount = document.querySelector(".cart-count");
 
         if (data.success) {
             const totalItems = data.cartItems.reduce(
                 (sum, item) => sum + item.quantity,
                 0
             );
-            document.querySelector(".cart-count").textContent = totalItems;
+
+            if(cartCount) {
+                cartCount.textContent = totalItems;
+            }
         }
     } catch (error) {
         console.error("Error updating cart count:", error);
