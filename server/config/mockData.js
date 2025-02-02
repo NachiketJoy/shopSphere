@@ -55,6 +55,7 @@ const generateProducts = () => {
             `${category.toLowerCase()}_${i}_3.jpg`,
           ],
           price: finalPrice,
+          discountedPrice: finalPrice,
           category: category,
           retailer: retailer,
           quantity: Math.floor(Math.random() * 100) + 1, // Random quantity between 1 and 100

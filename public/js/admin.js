@@ -23,6 +23,7 @@ function adminFetchProducts() {
                     product.description,
                     product.category,
                     product.price,
+                    product.discountedPrice,
                     product.quantity,
                     product.retailer,
                     `<button class="btn btn-primary" onclick="openEditModal('${product._id}')">Edit</button>
@@ -39,6 +40,7 @@ function adminFetchProducts() {
                         <td>${product.description}</td>
                         <td>${product.category}</td>
                         <td>${product.price}</td>
+                        <td>${product.discountedPrice}</td>
                         <td>${product.quantity}</td>
                         <td>${product.retailer}</td>
                         <td>
@@ -161,7 +163,7 @@ addProductForm?.addEventListener('submit', function (event) {
             const modal = M.Modal.getInstance(document.getElementById('addProductModal'));
             modal.close();
             showToast("Product added successfully");
-            fetchProducts(); // Refresh product list
+            adminFetchProducts(); // Refresh product list
         } else {
             showToast("Failed to add product");
             console.error("Failed to add product");
@@ -184,6 +186,7 @@ function openEditModal(productId) {
             document.getElementById('productDescription').value = product.data.description;
             document.getElementById('productCategory').value = product.data.category;
             document.getElementById('productPrice').value = product.data.price;
+            document.getElementById('discountedProductPrice').value = product.data.discountedPrice;
             document.getElementById('productQuantity').value = product.data.quantity;
             document.getElementById('productRetailer').value = product.data.retailer;
 
@@ -206,7 +209,6 @@ editProductForm?.addEventListener('submit', function (event) {
 
     // Get the productId from the form's dataset
     const productId = this.dataset.productId;
-    console.log(productId)
 
     // Get form data
     const updatedProduct = {
@@ -214,6 +216,7 @@ editProductForm?.addEventListener('submit', function (event) {
         description: document.getElementById('productDescription').value,
         category: document.getElementById('productCategory').value,
         price: parseFloat(document.getElementById('productPrice').value),
+        discountedPrice: parseFloat(document.getElementById('discountedProductPrice').value),
         quantity: parseInt(document.getElementById('productQuantity').value, 10),
         retailer: document.getElementById('productRetailer').value,
     };
@@ -229,6 +232,10 @@ editProductForm?.addEventListener('submit', function (event) {
     .then((response) => response.json())
     .then((data) => {
         if(data.success) {
+
+            if(data.data.discountedPrice < data.data.price) {
+                showToast('Big Promo on ' + data.data.name)
+            }
             // Close modal and refresh products list
             const modal = M.Modal.getInstance(document.getElementById('editProductModal'));
             modal.close();
@@ -257,7 +264,7 @@ async function deleteProduct(id) {
 
         if (response.ok) {
             showToast('Product deleted successfully');
-            fetchProducts(); 
+            adminFetchProducts(); 
         } else {
             showToast('Error deleting product');
         }
