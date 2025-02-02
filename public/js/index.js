@@ -1,4 +1,18 @@
-window.addEventListener('DOMContentLoaded', function () {
+
+window.addEventListener('load', () => {
+    const loader = document.querySelector('.loader-content');
+    if (loader) {
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+            loader.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }, 2000);
+    } else {
+        document.body.style.overflow = 'auto';
+    }
+});
+
+window.addEventListener('DOMContentLoaded', () => {
     const authentication = document.getElementById('authentication');
     const registerBtn = document.getElementById('register');
     const loginBtn = document.getElementById('login');
@@ -12,7 +26,9 @@ window.addEventListener('DOMContentLoaded', function () {
     const toastError = document.getElementById('toast_error');
     const userDropdownButton = document.getElementById("userDropdownButton");
     const userInfoPopup = document.getElementById("userInfoPopup");
+    const searchForm = document.getElementById("searchForm");
     const toastMessage = toastSuccess || toastError;
+    document.getElementById('year').textContent = new Date().getFullYear();
 
     // list of categories
     const categories = [
@@ -42,21 +58,7 @@ window.addEventListener('DOMContentLoaded', function () {
         "PetSmart",
     ];
 
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    window.addEventListener('load', () => {
-        const loader = document.querySelector('.loader-content');
-        if (loader) {
-            document.body.style.overflow = 'hidden'; 
-            setTimeout(() => {
-                loader.style.display = 'none';
-                document.body.style.overflow = 'auto'; 
-            }, 2000);
-        } else {
-            document.body.style.overflow = 'auto'; 
-        }
-    });
-    
+    updateCartCount();
 
     if (toastMessage !== null) {
         const message = toastMessage.getAttribute('data-message');
@@ -70,14 +72,30 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
     const currentPage = window.location.pathname;
-    if (currentPage === '/' || currentPage === '/dashboard') {
-        footer.style.display = 'none';
-    }
 
-    if(currentPage === '/dashboard') {
-        manageProductBtn.addEventListener('click', fetchProducts);
-        viewOrderBtn.addEventListener('click', fetchOrders)
-        adminModal(categories, retailers)
+    switch (currentPage) {
+        case '/':
+        case '/dashboard':
+            footer.style.display = 'none';
+
+            if (currentPage === '/dashboard') {
+                manageProductBtn.addEventListener('click', fetchProducts);
+                viewOrderBtn.addEventListener('click', fetchOrders);
+                adminModal(categories, retailers);
+            }
+            break;
+
+        case '/homepage':
+            fetchProducts();
+            break;
+
+        case '/cart':
+            loadCart();
+            break;
+
+        case '/checkout':
+            loadCheckoutItems();
+            break;
     }
 
     registerBtn?.addEventListener('click', () => {
@@ -115,6 +133,13 @@ window.addEventListener('DOMContentLoaded', function () {
         document.getElementById("forgot-password-container").style.display = "none";
     });
 
+    searchForm?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        fetchProducts();
+    });
+
+    var elems = document.querySelectorAll("select");
+    M.FormSelect.init(elems);
 
     // Toggle pop up box
     if (userDropdownButton && userInfoPopup) {
@@ -123,7 +148,7 @@ window.addEventListener('DOMContentLoaded', function () {
             if (e.target === userDropdownButton) {
                 e.preventDefault();
                 userInfoPopup.classList.toggle("active");
-            } 
+            }
             // Check if the click target is outside of the user info popup
             else if (!userInfoPopup.contains(e.target)) {
                 userInfoPopup.classList.remove("active");
@@ -138,11 +163,11 @@ async function updateCartCount() {
         const data = await response.json();
 
         if (data.success) {
-        const totalItems = data.cartItems.reduce(
-            (sum, item) => sum + item.quantity,
-            0
-        );
-        document.querySelector(".cart-count").textContent = totalItems;
+            const totalItems = data.cartItems.reduce(
+                (sum, item) => sum + item.quantity,
+                0
+            );
+            document.querySelector(".cart-count").textContent = totalItems;
         }
     } catch (error) {
         console.error("Error updating cart count:", error);
@@ -177,5 +202,181 @@ function showToast(message) {
         M.toast({ html: message });
     } else {
         console.error("Materialize is not loaded.");
+    }
+}
+
+// homepage product
+async function fetchProducts(page = 1) {
+    try {
+        const search = document.getElementById("search").value;
+        const retailer = document.getElementById("retailer").value;
+        const sortBy = document.getElementById("sortBy").value;
+        const order = document.getElementById("order").value;
+
+        const queryParams = new URLSearchParams({
+            search,
+            retailer,
+            sortBy,
+            order,
+            page,
+            limit: 12,
+        });
+
+        const response = await fetch(`/products?${queryParams}`);
+        const data = await response.json();
+
+        if (data.success) {
+            displayProducts(data.data);
+            displayPagination(data.pagination);
+        } else {
+            M.toast({ html: "Error loading products" });
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        M.toast({ html: "Error loading products" });
+    }
+}
+
+function displayProducts(products) {
+    const container = document.getElementById("productsContainer");
+    container.innerHTML = products
+        .map(
+            (product) => `
+          <div class="col s12 m6 l4">
+            <div class="card">
+              <div class="card-image">
+                <img src="${product.image || "https://placehold.co/600x400"}">
+                <span class="card-title">${product.name}</span>
+                <a class="btn-floating halfway-fab waves-effect waves-light red" onclick="addToCart('${product._id
+                }')">
+                  <i class="add_button">Add</i>
+                </a>
+              </div>
+              <div class="card-content">
+                <p class="price">Price: $${product.price}</p>
+                <p class="quantity">Quantity: ${product.quantity}</p>
+                <p>${product.description}</p>
+                <p class="retailer">Retailer: ${product.retailer}</p>
+              </div>
+            </div>
+          </div>
+        `
+        )
+        .join("");
+}
+
+function displayPagination(pagination) {
+    // If there is no pagination
+    if (!pagination) return;
+
+    const container = document.getElementById("pagination");
+
+    let html = `
+            <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
+          `;
+
+    // Pagination
+    html += '<ul class="pagination">';
+
+    // chevron-left
+    html += `
+            <li class="${pagination.currentPage === 1 ? "disabled" : ""}">
+              <a href="#!" onclick="${pagination.currentPage > 1
+            ? `fetchProducts(${pagination.currentPage - 1})`
+            : ""
+        }">
+                <i class="fas fa-chevron-left"></i>
+              </a>
+            </li>
+          `;
+
+    // pages
+    const visiblePages = 5; // the max pages display
+    const startPage = Math.max(
+        1,
+        pagination.currentPage - Math.floor(visiblePages / 2)
+    );
+    const endPage = Math.min(
+        pagination.totalPages,
+        startPage + visiblePages - 1
+    );
+
+    for (let i = startPage; i <= endPage; i++) {
+        html += `
+              <li class="${pagination.currentPage === i ? "active" : ""}">
+                <a href="#!" onclick="fetchProducts(${i})">${i}</a>
+              </li>
+            `;
+    }
+
+    // ... and the last page
+    if (endPage < pagination.totalPages) {
+        html += `
+              <li class="disabled">
+                <a href="#!">...</a>
+              </li>
+              <li>
+                <a href="#!" onclick="fetchProducts(${pagination.totalPages})">${pagination.totalPages}</a>
+              </li>
+            `;
+    }
+
+    // chevron-right
+    html += `
+            <li class="${pagination.currentPage === pagination.totalPages ? "disabled" : ""
+        }">
+              <a href="#!" onclick="${pagination.currentPage < pagination.totalPages
+            ? `fetchProducts(${pagination.currentPage + 1})`
+            : ""
+        }">
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            </li>
+          `;
+
+    html += "</ul>";
+
+    // Pagination Jump 
+    html += `
+            <div class="pagination-jump">
+              <label for="jumpPage">Go to page:</label>
+              <input type="number" id="jumpPage" min="1" max="${pagination.totalPages}" value="${pagination.currentPage}">
+              <button onclick="jumpToPage(${pagination.totalPages})">Go</button>
+            </div>
+          `;
+
+    html += "</div>";
+
+    container.innerHTML = html;
+}
+
+function jumpToPage(totalPages) {
+    const pageInput = document.getElementById("jumpPage");
+    const pageNumber = parseInt(pageInput.value, 10);
+
+    if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
+        fetchProducts(pageNumber);
+    } else {
+        showToast("Please enter a valid page number.");
+    }
+}
+
+async function addToCart(productId) {
+    try {
+        const response = await fetch("/cart/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ productId }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            M.toast({ html: "Item added to cart" });
+            updateCartCount();
+        }
+    } catch (error) {
+        M.toast({ html: "Error adding item to cart" });
     }
 }
