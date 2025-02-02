@@ -12,6 +12,35 @@ window.addEventListener('DOMContentLoaded', function () {
     const toastError = document.getElementById('toast_error');
     const userDropdownButton = document.getElementById("userDropdownButton");
     const userInfoPopup = document.getElementById("userInfoPopup");
+    const toastMessage = toastSuccess || toastError;
+
+    // list of categories
+    const categories = [
+        "Technology",
+        "Clothing",
+        "Food",
+        "Home & Garden",
+        "Sports & Outdoors",
+        "Books",
+        "Beauty & Health",
+        "Toys & Games",
+        "Automotive",
+        "Pet Supplies",
+    ];
+
+    // list of retailers
+    const retailers = [
+        "Amazon",
+        "Walmart",
+        "Target",
+        "Best Buy",
+        "Costco",
+        "eBay",
+        "Newegg",
+        "Home Depot",
+        "Macy's",
+        "PetSmart",
+    ];
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -29,20 +58,15 @@ window.addEventListener('DOMContentLoaded', function () {
     });
     
 
-    if (toastSuccess !== null || toastError !== null) {
-        if (toastSuccess) {
-            M.toast({
-                html: toastSuccess.getAttribute('data-message'),
-                classes: 'toast toast__success',
-                displayLength: 4000
-            });
-        } else {
-            M.toast({
-                html: toastError.getAttribute('data-message'),
-                classes: 'toast toast__error',
-                displayLength: 4000
-            });
-        }
+    if (toastMessage !== null) {
+        const message = toastMessage.getAttribute('data-message');
+        const toastClass = toastSuccess ? 'toast__success' : 'toast__error';
+
+        M.toast({
+            html: message,
+            classes: `toast ${toastClass}`,
+            displayLength: 4000
+        });
     }
 
     const currentPage = window.location.pathname;
@@ -53,6 +77,7 @@ window.addEventListener('DOMContentLoaded', function () {
     if(currentPage === '/dashboard') {
         manageProductBtn.addEventListener('click', fetchProducts);
         viewOrderBtn.addEventListener('click', fetchOrders)
+        adminModal(categories, retailers)
     }
 
     registerBtn?.addEventListener('click', () => {
@@ -105,10 +130,6 @@ window.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-
-
-
-
 });
 
 async function updateCartCount() {
@@ -149,4 +170,12 @@ function adminNav(evt, navItems) {
     document.getElementById(navItems).style.display = "block";
     evt.currentTarget.classList.add("active");
     evt.currentTarget.closest("li").classList.add("active");
+}
+
+function showToast(message) {
+    if (M && M.toast) {
+        M.toast({ html: message });
+    } else {
+        console.error("Materialize is not loaded.");
+    }
 }

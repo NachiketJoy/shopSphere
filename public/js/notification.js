@@ -33,9 +33,7 @@ function updateNotifications(notification) {
   }
 
   // Show toast notification
-  if (M && M.toast) {
-    M.toast({ html: notification.message });
-  }
+  showToast(notification.message)
 }
 
 // Connect to main notification socket

@@ -1,4 +1,5 @@
 const Product = require("../models/productModels");
+const Auth = require("../models/authModels");
 
 // Get all products with search, filter, and sort
 exports.getProducts = async (req, res) => {
@@ -9,8 +10,13 @@ exports.getProducts = async (req, res) => {
       sortBy,
       order = "asc",
       page = 1,
-      limit = 10,
+      limit = 12,
     } = req.query;
+
+    const admin_login_email = process.env.ADMIN_LOGIN_EMAIL;
+    const users = await Auth.find();
+    const adminUser = users.find((user) => user.email === admin_login_email);
+    const isAdmin = adminUser.email === req.user.email;
 
     let query = {};
 
@@ -37,26 +43,33 @@ exports.getProducts = async (req, res) => {
     }
 
     // Calculate skip value for pagination
-    const skip = (page - 1) * limit;
+    // const skip = (page - 1) * limit;
+    const skip = isAdmin ? 0 : (page - 1) * limit;
+    const limitValue = isAdmin ? 0 : parseInt(limit);
+
 
     // Execute query with pagination
     const products = await Product.find(query)
       .sort(sortObject)
       .skip(skip)
-      .limit(parseInt(limit));
+      .limit(parseInt(limitValue));
 
     // Get total count for pagination
-    const total = await Product.countDocuments(query);
+    // const total = await Product.countDocuments(query);
+    const total = isAdmin ? products.length : await Product.countDocuments(query);
+
 
     res.status(200).json({
       success: true,
       data: products,
-      pagination: {
-        currentPage: parseInt(page),
-        totalPages: Math.ceil(total / limit),
-        totalItems: total,
-        itemsPerPage: parseInt(limit),
-      },
+      pagination: isAdmin ? 
+        null :
+        {
+          currentPage: parseInt(page),
+          totalPages: Math.ceil(total / limit),
+          totalItems: total,
+          itemsPerPage: parseInt(limit),
+        },
     });
   } catch (err) {
     console.error(err);
