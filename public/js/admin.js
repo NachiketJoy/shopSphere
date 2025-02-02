@@ -4,7 +4,7 @@ const addProductBtn = document.getElementById("addProductBtn");
 const addProductForm = document.getElementById("addProductForm");
 const editProductForm = document.getElementById("editProductForm");
 
-function fetchProducts() {
+function adminFetchProducts() {
     fetch('/products')
         .then(response => response.json())
         .then(data => {
@@ -206,6 +206,7 @@ editProductForm?.addEventListener('submit', function (event) {
 
     // Get the productId from the form's dataset
     const productId = this.dataset.productId;
+    console.log(productId)
 
     // Get form data
     const updatedProduct = {
@@ -232,7 +233,7 @@ editProductForm?.addEventListener('submit', function (event) {
             const modal = M.Modal.getInstance(document.getElementById('editProductModal'));
             modal.close();
             showToast('Product updated successfully')
-            fetchProducts();
+            adminFetchProducts();
         } else {
             showToast('Failed to update product')
             console.error('Failed to update product');
