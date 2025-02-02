@@ -45,7 +45,9 @@
 
                 <div class="popup-header">
                   <span class="popup-title">ShopSphere</span>
-                  <a href="#" id="logout" class="logout-link">Log out</a>
+                  <a href="#" id="logout" class="logout-link">Log out 
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
                 </div>
 
                 <div class="user-details">
@@ -53,11 +55,6 @@
                   <div class="user-text">
                     <p class="user-name"><%- user.fullName %></p>
                     <p class="user-email"><%- user.email %></p>
-                    <a href="/account" class="view-account">
-                      View Account
-                      <i class="fas fa-external-link-alt"></i>
-                    </a>
-                    
                   </div>
                 </div>
                 
@@ -71,9 +68,3 @@
     </div>
   </nav>
 </div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    updateCartCount();
-  });
-</script>
