@@ -97,7 +97,7 @@
         sortBy,
         order,
         page,
-        limit: 10,
+        limit: 12,
       });
 
       const response = await fetch(`/products?${queryParams}`);
@@ -145,6 +145,9 @@
   }
 
   function displayPagination(pagination) {
+    // If there is no pagination
+    if (!pagination) return;
+
     const container = document.getElementById("pagination");
 
     let html = `
@@ -236,7 +239,7 @@
     if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
       fetchProducts(pageNumber);
     } else {
-      alert("Please enter a valid page number.");
+      showToast("Please enter a valid page number.");
     }
   }
 

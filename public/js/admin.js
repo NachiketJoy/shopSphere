@@ -1,5 +1,8 @@
 let dataTableInstance;
 const passwordUpdateForm = document.getElementById("passwordForm");
+const addProductBtn = document.getElementById("addProductBtn");
+const addProductForm = document.getElementById("addProductForm");
+const editProductForm = document.getElementById("editProductForm");
 
 function fetchProducts() {
     fetch('/products')
@@ -63,82 +66,56 @@ function fetchProducts() {
         .catch(error => console.error('Error loading products:', error));
 }
 
+function adminModal (categories, retailers) {
+      // Initialize modals
+      const addModal = document.getElementById('addProductModal');
+      const editModal = document.getElementById('editProductModal');
+      M.Modal.init(addModal);
+      M.Modal.init(editModal);
+
+      // Populate category/retailer select dropdowns
+      const addCategorySelect = document.getElementById('addProductCategory');
+      const editCategorySelect = document.getElementById('productCategory');
+      const addRetailerSelect = document.getElementById('addProductRetailer');
+      const editRetailerSelect = document.getElementById('productRetailer');
+
+      categories.forEach(category => {
+          const option = document.createElement('option');
+          option.value = category;
+          option.textContent = category;
+
+          // Add to both dropdowns
+          addCategorySelect.appendChild(option.cloneNode(true));
+          editCategorySelect.appendChild(option.cloneNode(true));
+      });
+
+      retailers.forEach(retailer => {
+          const option = document.createElement('option');
+          option.value = retailer;
+          option.textContent = retailer;
   
-document.addEventListener('DOMContentLoaded', function () {
-    const categories = [
-        "Technology",
-        "Clothing",
-        "Food",
-        "Home & Garden",
-        "Sports & Outdoors",
-        "Books",
-        "Beauty & Health",
-        "Toys & Games",
-        "Automotive",
-        "Pet Supplies",
-    ];
+          addRetailerSelect.appendChild(option.cloneNode(true));
+          editRetailerSelect.appendChild(option.cloneNode(true));
+      });
 
-    const retailers = [
-        "Amazon",
-        "Walmart",
-        "Target",
-        "Best Buy",
-        "Costco",
-        "eBay",
-        "Newegg",
-        "Home Depot",
-        "Macy's",
-        "PetSmart",
-    ];
-        // Initialize modals
-        const addModal = document.getElementById('addProductModal');
-        const editModal = document.getElementById('editProductModal');
-        M.Modal.init(addModal);
-        M.Modal.init(editModal);
+      // Initialize Materialize select
+      M.FormSelect.init(addCategorySelect);
+      M.FormSelect.init(editCategorySelect);
+      M.FormSelect.init(addRetailerSelect);
+      M.FormSelect.init(editRetailerSelect);
 
-        // Populate category/retailer select dropdowns
-        const addCategorySelect = document.getElementById('addProductCategory');
-        const editCategorySelect = document.getElementById('productCategory');
-        const addRetailerSelect = document.getElementById('addProductRetailer');
-        const editRetailerSelect = document.getElementById('productRetailer');
-
-        categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-
-            // Add to both dropdowns
-            addCategorySelect.appendChild(option.cloneNode(true));
-            editCategorySelect.appendChild(option.cloneNode(true));
-        });
-
-        retailers.forEach(retailer => {
-            const option = document.createElement('option');
-            option.value = retailer;
-            option.textContent = retailer;
-    
-            addRetailerSelect.appendChild(option.cloneNode(true));
-            editRetailerSelect.appendChild(option.cloneNode(true));
-        });
-
-        // Initialize Materialize select
-        M.FormSelect.init(addCategorySelect);
-        M.FormSelect.init(editCategorySelect);
-        M.FormSelect.init(addRetailerSelect);
-        M.FormSelect.init(editRetailerSelect);
-
-        
-        const selects = document.querySelectorAll('select');
-        M.FormSelect.init(selects, {
-            dropdownOptions: {
-                constrainWidth: true, 
-                container: document.body, // Attach the dropdown to the body to avoid going beyond the modal
-            },
-        });
-});
+      
+      const selects = document.querySelectorAll('select');
+      M.FormSelect.init(selects, {
+          dropdownOptions: {
+              constrainWidth: true, 
+              container: document.body, // Attach the dropdown to the body to avoid going beyond the modal
+          },
+      });
+}
 
 // Open Add Product Modal
-document.getElementById('addProductBtn').addEventListener('click', function () {
+addProductBtn?.addEventListener('click', function () {
     // Clear the form fields before opening the modal
     document.getElementById('addProductName').value = '';
     document.getElementById('addProductDescription').value = '';
@@ -154,8 +131,9 @@ document.getElementById('addProductBtn').addEventListener('click', function () {
     const addModal = M.Modal.getInstance(document.getElementById('addProductModal'));
     addModal.open();
 });
+
 // Add Product Form Submit
-document.getElementById('addProductForm').addEventListener('submit', function (event) {
+addProductForm?.addEventListener('submit', function (event) {
     event.preventDefault();
 
     // Get form data
@@ -176,18 +154,25 @@ document.getElementById('addProductForm').addEventListener('submit', function (e
         },
         body: JSON.stringify(newProduct),
     })
-        .then((response) => {
-            if (response.ok) {
-                // Close modal and refresh products list
-                const modal = M.Modal.getInstance(document.getElementById('addProductModal'));
-                modal.close();
-                fetchProducts(); // Refresh product list
-            } else {
-                console.error('Failed to add product');
-            }
-        })
-        .catch((error) => console.error('Error adding product:', error));
+    .then((response) => response.json())
+    .then((data) => {
+        if (data.success) {
+            // Close modal and show success alert
+            const modal = M.Modal.getInstance(document.getElementById('addProductModal'));
+            modal.close();
+            showToast("Product added successfully");
+            fetchProducts(); // Refresh product list
+        } else {
+            showToast("Failed to add product");
+            console.error("Failed to add product");
+        }
+    })
+    .catch((error) => {
+        showToast('There was an error adding the product');
+        console.error('Error adding product:', error);
+    });
 });
+
 // Open Edit Product Modal
 function openEditModal(productId) {
     fetch(`/products/${productId}`)
@@ -214,8 +199,9 @@ function openEditModal(productId) {
         })
         .catch((error) => console.error('Error fetching product details:', error));
 }
+
 // Edit Product Form Submit
-document.getElementById('editProductForm').addEventListener('submit', function (event) {
+editProductForm?.addEventListener('submit', function (event) {
     event.preventDefault();
 
     // Get the productId from the form's dataset
@@ -239,17 +225,23 @@ document.getElementById('editProductForm').addEventListener('submit', function (
         },
         body: JSON.stringify(updatedProduct),
     })
-    .then((response) => {
-        if (response.ok) {
-        // Close modal and refresh products list
-        const modal = M.Modal.getInstance(document.getElementById('editProductModal'));
-        modal.close();
-        fetchProducts();
+    .then((response) => response.json())
+    .then((data) => {
+        if(data.success) {
+            // Close modal and refresh products list
+            const modal = M.Modal.getInstance(document.getElementById('editProductModal'));
+            modal.close();
+            showToast('Product updated successfully')
+            fetchProducts();
         } else {
-        console.error('Failed to update product');
+            showToast('Failed to update product')
+            console.error('Failed to update product');
         }
     })
-    .catch((error) => console.error('Error updating product:', error));
+    .catch((error) => {
+        showToast('There was an error updating the product')
+        console.error('Error updating product:', error)
+    });
 });
 
 // Function to handle the delete operation
@@ -263,14 +255,14 @@ async function deleteProduct(id) {
         });
 
         if (response.ok) {
-            alert('Product deleted successfully');
+            showToast('Product deleted successfully');
             fetchProducts(); 
         } else {
-            alert('Error deleting product');
+            showToast('Error deleting product');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error deleting product');
+        showToast('Error deleting product');
     }
 }
 
