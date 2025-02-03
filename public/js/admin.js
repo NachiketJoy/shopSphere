@@ -344,6 +344,20 @@ passwordUpdateForm?.addEventListener('submit', async (e) => {
     // retrieve both password field value
     const currentPassword = document.getElementById('currentPassword').value;
     const newPassword = document.getElementById('newPassword').value;
+    const errorMsg = document.getElementById('error'); 
+
+    let msg = [];
+
+    const strongPassword = password => {
+        return /^(?=.*[!@#$%^&*])[\S]{8,}$/.test(password);
+    };
+
+    if (!strongPassword(newPassword.value)) {
+        msg.push('Password should be at least 8 characters and contain at least 1 special character (!@#$%^&*).');
+        errorMsg.innerText = msg.join(', ');
+        newPassword.focus();
+        return false;
+    }
 
     try {
       const response = await fetch('/update-password', {
