@@ -169,7 +169,7 @@ async function updateCartCount() {
                 0
             );
 
-            if(cartCount) {
+            if (cartCount) {
                 cartCount.textContent = totalItems;
             }
         }
@@ -243,29 +243,37 @@ async function fetchProducts(page = 1) {
 
 function displayProducts(products) {
     const container = document.getElementById("productsContainer");
-    container.innerHTML = products
-        .map(
-            (product) => `
-          <div class="col s12 m6 l4">
-            <div class="card">
-              <div class="card-image">
-                <img src="${product.image || "https://placehold.co/600x400"}">
-                <span class="card-title">${product.name}</span>
-                <a class="btn-floating halfway-fab waves-effect waves-light red" onclick="addToCart('${product._id
+    container.innerHTML = products.map((product) => {
+        if (product.quantity != 0) {
+            return `
+            <div class="col s12 m6 l4">
+                <div class="card">
+                <div class="card-image">
+                    <img src="${product.image || "https://placehold.co/600x400"}">
+                    <span class="card-title">${product.name}</span>
+                    <a class="btn-floating halfway-fab waves-effect waves-light red" onclick="addToCart('${product._id
                 }')">
-                  <i class="add_button">Add</i>
-                </a>
-              </div>
-              <div class="card-content">
-                <p class="price">Price: $${product.price}</p>
-                <p class="quantity">Quantity: ${product.quantity}</p>
-                <p>${product.description}</p>
-                <p class="retailer">Retailer: ${product.retailer}</p>
-              </div>
-            </div>
-          </div>
-        `
-        )
+                    <i class="add_button">Add</i>
+                    </a>
+                </div>
+                <div class="card-content">
+                    <p class="price">Price: $${product.price}</p>
+                    <p class="quantity">Quantity: ${product.quantity}</p>
+                    <p>${product.description}</p>
+                    <p class="retailer">Retailer: ${product.retailer}</p>
+                </div>
+                </div>
+            </div> `;
+        } else {
+            return `
+                <div>
+                 <p> No product found </p>
+                </div>
+                `
+        }
+    }
+
+    )
         .join("");
 }
 

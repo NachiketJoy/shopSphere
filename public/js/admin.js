@@ -236,6 +236,10 @@ editProductForm?.addEventListener('submit', function (event) {
             if(data.data.discountedPrice < data.data.price) {
                 showToast('Big Promo on ' + data.data.name)
             }
+
+            if(data.data.quantity <= 2) {
+                showToast('not much in stock')
+            }
             // Close modal and refresh products list
             const modal = M.Modal.getInstance(document.getElementById('editProductModal'));
             modal.close();
