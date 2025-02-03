@@ -9,6 +9,7 @@ router.get("/account", authenticateJWT, mainController.account);
 // contact page
 router.get("/contact", authenticateJWT, mainController.contact);
 router.post('/contact-us', mainController.contactMsg);
+router.get('/details', authenticateJWT, mainController.details);
 router.get("/order", authenticateJWT, mainController.order);
 
 // admin
