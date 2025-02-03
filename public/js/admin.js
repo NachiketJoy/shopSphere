@@ -3,6 +3,7 @@ const passwordUpdateForm = document.getElementById("passwordForm");
 const addProductBtn = document.getElementById("addProductBtn");
 const addProductForm = document.getElementById("addProductForm");
 const editProductForm = document.getElementById("editProductForm");
+const socket = io();
 
 function adminFetchProducts() {
     fetch('/products')
@@ -234,11 +235,19 @@ editProductForm?.addEventListener('submit', function (event) {
         if(data.success) {
 
             if(data.data.discountedPrice < data.data.price) {
-                showToast('Big Promo on ' + data.data.name)
+                socket.emit('newPromo', {
+                    from: 'Admin',
+                    text: `Price reduced on ${data.data.name} for a limited time only`,
+                    createdAt: new Date().toISOString(),
+                  });   
             }
 
             if(data.data.quantity <= 2) {
-                showToast('not much in stock')
+                socket.emit('lastItem', {
+                    from: 'Admin',
+                    text: `${data.data.name} is nearly finished`,
+                    createdAt: new Date().toISOString(),
+                  });  
             }
             // Close modal and refresh products list
             const modal = M.Modal.getInstance(document.getElementById('editProductModal'));

@@ -4,10 +4,10 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
 const path = require("path");
-const http = require("http");
-const httpServer = http.createServer(app);
-const io = require("socket.io")(httpServer);
-const initializeSocket = require("./socket");
+
+// initialize socket.io
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 const port = process.env.PORT || 3000;
 
@@ -19,6 +19,9 @@ const cartRoutes = require("./server/routes/cartRoutes");
 const orderRoutes = require("./server/routes/orderRoutes");
 
 require("dotenv").config();
+
+// Initialize Socket.IO
+require('./socket')(io);
 
 connectDB();
 
@@ -49,19 +52,9 @@ app.use("/", productRoutes);
 app.use("/", cartRoutes);
 app.use("/", orderRoutes);
 
-io.on("connection", (socket) => {
-  // console.log("Client connected");
-
-  socket.on("disconnect", () => {
-    // console.log("Client disconnected");
-  });
-});
-
-// Initialize Socket.IO
-initializeSocket(io);
-
-httpServer.listen(port, () => {
+server.listen(port, () => {
   console.log("App listening to: " + port);
   console.log(`Server is running on http://localhost:${port}`)
 });
-module.exports = { io, app, httpServer };
+
+module.exports = { app };
