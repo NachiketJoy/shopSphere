@@ -387,6 +387,8 @@ async function addToCart(productId) {
         if (data.success) {
             M.toast({ html: "Item added to cart" });
             updateCartCount();
+        } else {
+            M.toast({ html: "Cannot add more" });
         }
     } catch (error) {
         M.toast({ html: "Error adding item to cart" });
