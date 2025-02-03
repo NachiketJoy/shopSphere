@@ -1,4 +1,3 @@
-
 window.addEventListener('load', () => {
     const loader = document.querySelector('.loader-content');
     if (loader) {
@@ -27,8 +26,16 @@ window.addEventListener('DOMContentLoaded', () => {
     const userDropdownButton = document.getElementById("userDropdownButton");
     const userInfoPopup = document.getElementById("userInfoPopup");
     const searchForm = document.getElementById("searchForm");
+    const year = document.getElementById('year');
+    
+    const detailModal = document.getElementById('detailProductModal');
+    M.Modal.init(detailModal);
+    
+    const currentPage = window.location.pathname;
     const toastMessage = toastSuccess || toastError;
-    document.getElementById('year').textContent = new Date().getFullYear();
+    year.textContent = new Date().getFullYear();
+
+    updateCartCount();
 
     // list of categories
     const categories = [
@@ -58,8 +65,6 @@ window.addEventListener('DOMContentLoaded', () => {
         "PetSmart",
     ];
 
-    updateCartCount();
-
     if (toastMessage !== null) {
         const message = toastMessage.getAttribute('data-message');
         const toastClass = toastSuccess ? 'toast__success' : 'toast__error';
@@ -70,8 +75,6 @@ window.addEventListener('DOMContentLoaded', () => {
             displayLength: 4000
         });
     }
-
-    const currentPage = window.location.pathname;
 
     switch (currentPage) {
         case '/':
@@ -210,6 +213,7 @@ function showToast(message) {
 }
 
 // homepage product
+let productsList = [];
 async function fetchProducts(page = 1) {
     try {
         const search = document.getElementById("search").value;
@@ -230,7 +234,8 @@ async function fetchProducts(page = 1) {
         const data = await response.json();
 
         if (data.success) {
-            displayProducts(data.data);
+            productsList = data.data;
+            displayProducts(productsList);
             displayPagination(data.pagination);
         } else {
             M.toast({ html: "Error loading products" });
@@ -247,7 +252,7 @@ function displayProducts(products) {
         if (product.quantity != 0) {
             return `
             <div class="col s12 m6 l4">
-                <div class="card">
+                <div class="card" onclick="showProductDetails('${product._id}')">
                 <div class="card-image">
                     <img src="${product.image || "https://placehold.co/600x400"}">
                     <span class="card-title">${product.name}</span>
@@ -271,10 +276,8 @@ function displayProducts(products) {
                 </div>
                 `
         }
-    }
-
-    )
-        .join("");
+    })
+    .join("");
 }
 
 function displayPagination(pagination) {
@@ -394,3 +397,61 @@ async function addToCart(productId) {
         M.toast({ html: "Error adding item to cart" });
     }
 }
+
+// Product Details Modal
+function showProductDetails(productId) {
+    const product = productsList.find(p => p._id === productId);
+    const productName = document.getElementById("productName");
+    const productCategory = document.getElementById("productCategory");
+    const productPrice = document.getElementById("productPrice");
+    const productDesc = document.getElementById("productDesc");
+    const similarProductsContainer = document.getElementById("similarProductsContainer");
+    const carouselImageContainer = document.getElementById("productImageCarousel");
+
+    console.log(product)
+    if (!product) {
+        M.toast({ html: "Product not found!" });
+        return;
+    }
+
+    productName.innerText = product.name;
+    productCategory.innerText = product.category;
+    productPrice.innerText = product.price;
+    productDesc.innerText = product.description;
+
+    carouselImageContainer.innerHTML = "";
+
+    product.images.forEach(image => {
+        const carouselItem = document.createElement("a");
+        carouselItem.classList.add("carousel-item");
+        carouselItem.href = "#";
+        carouselItem.innerHTML = `<img src="${image}" alt="${product.name}">`;
+        carouselImageContainer.appendChild(carouselItem);
+    });
+
+    setTimeout(() => {
+        M.Carousel.init(carouselImageContainer, {
+            fullWidth: true,
+            indicators: true
+        });
+    }, 100);
+
+    // Find similar products
+    const similarProducts = productsList
+        .filter(p => p.category === product.category && p._id !== productId)
+        .slice(0, 5);
+
+        similarProductsContainer.innerHTML = similarProducts.map(p => `
+        <div class="similar-product" onclick="showProductDetails('${p._id}')">
+            <img src="${p.image || "https://placehold.co/100x100"}" alt="${p.name}">
+            <p>${p.name}</p>
+        </div>
+    `).join("");
+
+    // Open the modal
+    const modal = M.Modal.getInstance(document.getElementById("detailProductModal"));
+    modal.open();
+}
+
+
+

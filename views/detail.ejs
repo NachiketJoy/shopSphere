@@ -1,24 +1,31 @@
-<%- include('./layout/header') %> 
-<%- include('./partials/navbar') %>
+<div class="container">
+    <div class="product-detail">
+      <div class="carousel" id="productImageCarousel">
+        <!-- Product images -->
+      </div>
 
-<div class="product-detail">
-    <img class="product-detail__img" src="https://placehold.co/600x400" alt="Product Image">
-    <div class="product-info">
-        <h1 class="detail-h1">Text Heading</h1>
-        <span class="tag">Tag</span>
-        <div class="price">50</div>
-        <p>Text</p>
+      <div class="product-info">
+        <h1 id="productName"></h1>
+        <p id="productCategory"></p>
+        <p id="productPrice"></p>
+        <p id="productDesc"></p>
     
         <button class="btn btn__primary">Button</button>
     
         <details>
-            <summary>Title</summary>
-            <p>Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list.</p>
+          <summary>Title</summary>
+          <p>
+            Answer the frequently asked question in a simple sentence, a longish
+            paragraph, or even in a list.
+          </p>
         </details>
+      </div>
     </div>
+
+    <div class="similar-products">
+        <h3>Similar Products</h3>
+        <div id="similarProductsContainer" class="similar-products-list">
+          <!-- Similar products-->
+        </div>
+      </div>
 </div>
-
-
-
-
-<%- include('./layout/footer') %>

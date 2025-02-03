@@ -50,9 +50,9 @@ const generateProducts = () => {
           name: `${category} Product ${i}`,
           description: `This is a detailed description for ${category} Product ${i}`,
           images: [
-            `${category.toLowerCase()}_${i}_1.jpg`,
-            `${category.toLowerCase()}_${i}_2.jpg`,
-            `${category.toLowerCase()}_${i}_3.jpg`,
+            `https://placehold.co/400x400?text=${category.toLowerCase()}_${i}_1`,
+            `https://placehold.co/400x400?text=${category.toLowerCase()}_${i}_2`,
+            `https://placehold.co/400x400?text=${category.toLowerCase()}_${i}_3`
           ],
           price: finalPrice,
           discountedPrice: finalPrice,
