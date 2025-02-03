@@ -14,11 +14,21 @@ exports.addToCart = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
+    const availableStock = product.quantity;
+
     // Check if the item is already in user's cart
     let cartItem = await CartItem.findOne({ authId, productId });
 
     if (cartItem) {
-      // If item exists, increment quantity by 1
+      // If the current quantity in cart exceeds available stock
+      if (cartItem.quantity >= availableStock) {
+        return res.status(400).json({
+          success: false,
+          message: `Cannot add more than ${availableStock} of this product.`,
+        });
+      }
+
+      // increment quantity by 1
       cartItem.quantity += 1;
       await cartItem.save();
     } else {
