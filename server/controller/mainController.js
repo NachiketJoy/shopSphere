@@ -130,3 +130,13 @@ exports.contactMsg = async (req, res) => {
         res.status(500).send('Something went wrong.');
     }
 }
+
+exports.details = async (req, res) => {
+    try { 
+        const user = req.user;
+        res.render("detail", { title: "Detail", user});
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Something went wrong.');
+    }
+}

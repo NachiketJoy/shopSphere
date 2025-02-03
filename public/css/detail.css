@@ -1,0 +1,19 @@
+.product-detail {
+ display: flex;
+}
+
+.price {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.price::before {
+    content: '$';
+    font-size: 1.5rem;
+    vertical-align: top;
+    position: relative;
+    top: 0.5rem;
+}
+
+
