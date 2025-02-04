@@ -46,7 +46,7 @@ socket.on("connect_error", (error) => {
   console.error("Socket connection error:", error);
 });
 
-socket.on("notification", (data) => {
+socket.on(`notification-${userId}`, (data) => {
   console.log("Received notification:", data);
   updateNotifications(data);
 });
