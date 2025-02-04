@@ -1,19 +1,99 @@
-/* .product-detail {
- display: flex;
+.detailModal {
+  width: 43%;
+  max-width: none;
 }
 
-.price {
-    font-size: 2.5rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
+.modal-content.detailContainer {
+  width: 90%;
+  margin: 0 auto 30px;
+  padding: 0 24px;
 }
 
-.price::before {
-    content: '$';
-    font-size: 1.5rem;
-    vertical-align: top;
-    position: relative;
-    top: 0.5rem;
+.detailContainer .modal-header {
+  margin-top: 10px;
+  margin-left: 90%;
 }
- */
 
+.product-detail {
+  display: flex;
+  align-items: center;
+  margin: 0 0 20px;
+}
+
+/* Carousel */
+.product-detail .carousel {
+  height: 345px;
+}
+
+.carousel .indicators .indicator-item {
+  background-color: var(--dark);
+}
+
+.carousel .indicators .indicator-item.active {
+  background-color: var(--primary);
+}
+
+/* Product info */
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.detailProductName {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.detailProductCategory {
+  width: fit-content;
+  background-color: var(--info);
+  padding: 3px 8px;
+  border-radius: 8px;
+  opacity: 0.5;
+  color: var(--white);
+  font-size: 10px;
+}
+
+.detailProductPrice {
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+.productPrice {
+  margin-left: -10px;
+}
+
+.detailProductPrice::before {
+  content: "$";
+  font-size: 1.5rem;
+  vertical-align: top;
+  position: relative;
+  top: -10px;
+}
+
+/* Similar products */
+.similar-products-heading {
+  position: relative;
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.similar-products-heading::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 45%;
+  width: 10%;
+  height: 2px;
+  background-color: var(--primary);
+}
+
+.similar-products-list {
+  display: flex;
+  gap: 20px;
+}
+
+.similar-products img {
+  width: 100%;
+}
