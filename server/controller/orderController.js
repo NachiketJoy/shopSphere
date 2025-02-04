@@ -77,7 +77,7 @@ exports.createOrder = async (req, res) => {
 
     // Emit initial status
     if (io) {
-      io.emit("notification", {
+      io.emit(`notification-${userId}`, {
         type: "order",
         status: "pending",
         orderId: order._id,
@@ -105,7 +105,7 @@ exports.createOrder = async (req, res) => {
         );
 
         if (io) {
-          io.emit("notification", {
+          io.emit(`notification-${userId}`, {
             type: "order",
             status,
             orderId: order._id,
