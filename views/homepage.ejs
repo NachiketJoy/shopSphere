@@ -61,12 +61,12 @@
   <div class="row" id="productsContainer"></div>
 
   <!-- Detail Product Modal -->
-  <div id="detailProductModal" class="modal">
-      <div class="modal-content">
+  <div id="detailProductModal" class="modal detailModal">
+      <div class="modal-content detailContainer">
+        <div class="modal-header">
+          <a href="#!" class="modal-close btn waves-effect waves-light red">Cancel</a>
+        </div>
           <%- include('./detail') %>
-          <div class="modal-footer">
-            <a href="#!" class="modal-close btn waves-effect waves-light red">Cancel</a>
-          </div>
       </div>
     </div>
   </div>

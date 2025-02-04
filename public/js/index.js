@@ -254,7 +254,7 @@ function displayProducts(products) {
             <div class="col s12 m6 l4">
                 <div class="card" onclick="showProductDetails('${product._id}')">
                 <div class="card-image">
-                    <img src="${product.image || "https://placehold.co/600x400"}">
+                    <img src="${product.image || `https://placehold.co/400x400?text=IMG:${product.name}&font=playfair-display`}">
                     <span class="card-title">${product.name}</span>
                     <a class="btn-floating halfway-fab waves-effect waves-light red" onclick="addToCart('${product._id
                 }')">
@@ -408,7 +408,6 @@ function showProductDetails(productId) {
     const similarProductsContainer = document.getElementById("similarProductsContainer");
     const carouselImageContainer = document.getElementById("productImageCarousel");
 
-    console.log(product)
     if (!product) {
         M.toast({ html: "Product not found!" });
         return;
@@ -431,9 +430,9 @@ function showProductDetails(productId) {
 
     setTimeout(() => {
         M.Carousel.init(carouselImageContainer, {
-            fullWidth: true,
+            fullWidth: false,
             indicators: true
-        });
+        }).set(1);
     }, 100);
 
     // Find similar products
