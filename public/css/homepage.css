@@ -14,8 +14,15 @@
 }
 
 .search-container {
-  background-color: var(--background);
-  margin-bottom: 20px;
+  position: relative;
+  width: 92%;
+  margin: -5% auto 20px;
+  z-index: 9;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .search-content {
@@ -28,6 +35,20 @@
   justify-content: space-between;
   padding: 20px;
   color: var(--primary);
+}
+
+/* Newest product */
+.newest-products {
+  display: flex;
+  justify-content: space-between;
+}
+
+.newest-products .product {
+  width: 18%;
+}
+
+.newest-products .product img {
+  width: 100%;
 }
 
 /* product card */
@@ -98,7 +119,6 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  margin-top: 50px;
 }
 
 .pagination-jump {

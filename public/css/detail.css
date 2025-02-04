@@ -73,22 +73,6 @@
 }
 
 /* Similar products */
-.similar-products-heading {
-  position: relative;
-  text-align: center;
-  margin-bottom: 36px;
-}
-
-.similar-products-heading::after {
-  content: "";
-  position: absolute;
-  bottom: -5px;
-  left: 45%;
-  width: 10%;
-  height: 2px;
-  background-color: var(--primary);
-}
-
 .similar-products-list {
   display: flex;
   gap: 20px;
