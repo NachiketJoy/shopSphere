@@ -26,14 +26,14 @@ window.addEventListener('DOMContentLoaded', () => {
     const userDropdownButton = document.getElementById("userDropdownButton");
     const userInfoPopup = document.getElementById("userInfoPopup");
     const searchForm = document.getElementById("searchForm");
-    const year = document.getElementById('year');
-    
     const detailModal = document.getElementById('detailProductModal');
-    M.Modal.init(detailModal);
-    
+    const year = document.getElementById('year');
+
     const currentPage = window.location.pathname;
     const toastMessage = toastSuccess || toastError;
     year.textContent = new Date().getFullYear();
+
+    M.Modal.init(detailModal);
 
     updateCartCount();
 
@@ -100,6 +100,17 @@ window.addEventListener('DOMContentLoaded', () => {
             loadCheckoutItems();
             break;
     }
+
+    // change navbar color, when scroll
+    window.addEventListener('scroll', function () {
+        const navbar = document.querySelector('.nav');
+
+        if (window.scrollY > 0) {
+            navbar.classList.add('navbar-scrolled');
+        } else {
+            navbar.classList.remove('navbar-scrolled');
+        }
+    });
 
     registerBtn?.addEventListener('click', () => {
         authentication.classList.add("active");
@@ -237,6 +248,7 @@ async function fetchProducts(page = 1) {
             productsList = data.data;
             displayProducts(productsList);
             displayPagination(data.pagination);
+            showNewestProduct();
         } else {
             M.toast({ html: "Error loading products" });
         }
@@ -251,13 +263,12 @@ function displayProducts(products) {
     container.innerHTML = products.map((product) => {
         if (product.quantity != 0) {
             return `
-            <div class="col s12 m6 l4">
+            <div class="col s12 m6 l3">
                 <div class="card" onclick="showProductDetails('${product._id}')">
                 <div class="card-image">
-                    <img src="${product.image || `https://placehold.co/400x400?text=IMG:${product.name}&font=playfair-display`}">
+                    <img src="${product.image || `https://placehold.co/400x300?text=IMG:${product.name}&font=playfair-display`}">
                     <span class="card-title">${product.name}</span>
-                    <a class="btn-floating halfway-fab waves-effect waves-light red" onclick="addToCart('${product._id
-                }')">
+                    <a class="btn-floating halfway-fab waves-effect waves-light red" onclick="addToCart('${product._id}', event)">
                     <i class="add_button">Add</i>
                     </a>
                 </div>
@@ -376,7 +387,10 @@ function jumpToPage(totalPages) {
     }
 }
 
-async function addToCart(productId) {
+async function addToCart(productId, event) {
+    // Prevent the button from triggering the show details function
+    event.stopPropagation(); 
+    
     try {
         const response = await fetch("/cart/add", {
             method: "POST",
@@ -396,6 +410,33 @@ async function addToCart(productId) {
     } catch (error) {
         M.toast({ html: "Error adding item to cart" });
     }
+}
+
+// show newest product
+function showNewestProduct() {
+    const newProductsContainer = document.getElementById("newestProducts");
+
+    if (!Array.isArray(productsList) || productsList.length === 0) {
+        console.log("No products available to display.");
+        return;
+    }
+
+    const validProducts = productsList.filter(p => p.createdAt && !isNaN(new Date(p.createdAt).getTime()));
+
+    const newProducts = validProducts
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 5);
+
+    newProductsContainer.innerHTML = "";
+
+    newProducts.forEach(product => {
+        const productElement = document.createElement('div');
+        productElement.classList.add('product');
+        productElement.innerHTML = `
+            <img src="${product.images[0]}" alt="${product.name}">
+        `;
+        newProductsContainer.appendChild(productElement);
+    });
 }
 
 // Product Details Modal
@@ -440,7 +481,7 @@ function showProductDetails(productId) {
         .filter(p => p.category === product.category && p._id !== productId)
         .slice(0, 5);
 
-        similarProductsContainer.innerHTML = similarProducts.map(p => `
+    similarProductsContainer.innerHTML = similarProducts.map(p => `
         <div class="similar-product" onclick="showProductDetails('${p._id}')">
             <img src="${p.image || "https://placehold.co/100x100"}" alt="${p.name}">
             <p>${p.name}</p>
@@ -451,6 +492,3 @@ function showProductDetails(productId) {
     const modal = M.Modal.getInstance(document.getElementById("detailProductModal"));
     modal.open();
 }
-
-
-

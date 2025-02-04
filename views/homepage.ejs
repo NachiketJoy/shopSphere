@@ -6,7 +6,7 @@
 
 <div class="container homepage" id="container">
   <div class="banner">
-    <img class="banner-img" src="/assets/img/banner.jpg" alt="" />
+    <img class="banner-img" src="/assets/img/banner.png" alt="" />
   </div>
 
   <div class="search-container">
@@ -58,20 +58,29 @@
     </div>
   </div>
 
-  <div class="row" id="productsContainer"></div>
+  <div class="newestProductsContainer">
+    <h2 class="heading__h2">Our Newest Products</h2>
+    <div id="newestProducts" class="newest-products"></div>
+  </div>
+
+  <div class="featuredProductsContainer">
+    <h2 class="heading__h2">Our Featured Products</h2>
+    <div class="row" id="productsContainer"></div>
+  </div>
 
   <!-- Detail Product Modal -->
   <div id="detailProductModal" class="modal detailModal">
-      <div class="modal-content detailContainer">
-        <div class="modal-header">
-          <a href="#!" class="modal-close btn waves-effect waves-light red">Cancel</a>
-        </div>
-          <%- include('./detail') %>
+    <div class="modal-content detailContainer">
+      <div class="modal-header">
+        <a href="#!" class="modal-close btn waves-effect waves-light red"
+          >Cancel</a
+        >
       </div>
+      <%- include('./detail') %>
     </div>
   </div>
 
-  <div class="row">
+  <div class="row pagination-container">
     <div class="center-align" id="pagination"></div>
   </div>
 </div>

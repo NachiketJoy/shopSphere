@@ -125,7 +125,7 @@ checkoutForm?.addEventListener('submit', async (e) => {
                 updateNotifications(data);
             });
 
-            window.location.href = '/homepage';
+            window.location.href = '/order';
         }
     } catch (error) {
         M.toast({ html: 'Error creating order' });

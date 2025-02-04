@@ -1,5 +1,16 @@
+.navbar-fixed, .navbar-scrolled {
+  height: 9%;
+  transition: background-color 0.5s ease;
+}
+
 .nav {
-  background-color: var(--white);
+  background-color: transparent;
+  box-shadow: none;
+  padding: 15px 0;
+}
+
+.nav.navbar-scrolled{
+  background-color: var(--background);
 }
 
 nav.admin-nav {
