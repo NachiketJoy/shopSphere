@@ -492,3 +492,51 @@ function showProductDetails(productId) {
     const modal = M.Modal.getInstance(document.getElementById("detailProductModal"));
     modal.open();
 }
+
+
+//validation
+const submitBtn = document.getElementById('valid-form'); 
+const error = document.getElementById('error'); 
+submitBtn?.addEventListener('click', (e) => { 
+e.preventDefault(); 
+let msg= []; 
+
+const fullName = document.getElementById('fullName'); 
+const email = document.getElementById('emailRegister');
+const password = document.getElementById('passwordRegister');
+const emailIsValid = email => { 
+return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); 
+} 
+const strongPassword = password => { 
+return /^(?=.*[!@#$%^&*])[\S]{8,}$/.test(password); 
+}; 
+
+if (fullName.value === "") { 
+msg.push("Please enter your username."); 
+error.innerText = msg.join(', ');
+fullName.focus();
+return false; 
+} 
+
+if (email.value === "") { 
+msg.push("Please enter your email address."); 
+error.innerText = msg.join(', ');
+email.focus();
+return false; 
+} 
+
+if (!emailIsValid(email.value)) { 
+msg.push("Please enter a valid email."); 
+error.innerText = msg.join(', ');
+email.focus(); 
+return false; 
+} 
+if (!strongPassword(password.value)) { 
+msg.push('Password should be at least 8 characters and contain at least 1 special character (!@#$%^&*).'); 
+error.innerText = msg.join(', ') 
+password.focus(); 
+return false; 
+} 
+document.getElementById('register-form').submit(); 
+return true; 
+}); 

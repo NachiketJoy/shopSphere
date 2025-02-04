@@ -107,13 +107,61 @@ checkoutForm?.addEventListener('submit', async (e) => {
         }
     };
 
+    const errorMsg = document.getElementById('error'); 
+    let msg = []; 
+    
+    const cardNumber = document.getElementById('cardNumber');
+    const isValidCardNumber = number => { 
+        return /^\d{16}$/.test(number); 
+    }; 
+    if (!isValidCardNumber(cardNumber.value)) {
+        msg.push('The card number should include 16 digits');
+        errorMsg.innerText = msg.join(', ');
+        cardNumber.focus();
+        return false;
+    }
+
+    const expiryDate = document.getElementById('expiryDate');
+    const isValidExpiryDate = date => { 
+        return /^\d{2}\/\d{2}$/.test(date);  
+    }; 
+    if (!isValidExpiryDate(expiryDate.value)) {
+        msg.push('The expiry date should include 4 digits');
+        errorMsg.innerText = msg.join(', ');
+        expiryDate.focus();
+        return false;
+    }
+
+    const cvv = document.getElementById('cvv');
+    const isValidCVV = cvv => { 
+        return /^\d{3}$/.test(cvv);    
+    };
+    if (!isValidCVV(cvv.value)) {
+        msg.push('The cvv should include 3 digits');
+        errorMsg.innerText = msg.join(', ');
+        cvv.focus();
+        return false;
+    }
+
+    const postalCode = document.getElementById('postalCode');
+    const isValidPostalCode = code => { 
+        return /^\d{4}$/.test(code);     
+    }; 
+    if (!isValidPostalCode(postalCode.value)) {
+        msg.push('The postal code should include 4 digits');
+        errorMsg.innerText = msg.join(', ');
+        postalCode.focus();
+        return false;
+    }
+
     try {
         const response = await fetch('/orders', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(orderData)
+            // body: JSON.stringify(orderData)
+             body: JSON.stringify(cardNumber, expiryDate, cvv, postalCode)
         });
 
         const data = await response.json();
