@@ -1,4 +1,8 @@
 const checkoutForm = document.getElementById("checkoutForm");
+const cardNumber = document.getElementById('cardNumber');
+const expiryDate = document.getElementById('expiryDate');
+const cvv = document.getElementById('cvv');
+const postalCode = document.getElementById('postalCode');
 
 async function loadCart() {
     try {
@@ -95,14 +99,41 @@ function checkout() {
 checkoutForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    const errorMsg = document.getElementById('error'); 
+    errorMsg.textContent= '';
+
+    let msg = []; 
+    
+    
+    if (!isValidCardNumber(cardNumber.value)) {
+        msg.push('Enter a valid card number(16 Digits)');
+    }
+
+    if (!isValidExpiryDate(expiryDate.value)) {
+        msg.push('The expiry date should be in MM/YY format');
+    }
+
+    if (!isValidCVV(cvv.value)) {
+        msg.push('Enter a valid CVV');
+    }
+
+    if (!isValidPostalCode(postalCode.value)) {
+        msg.push('Enter a valid postal code');
+    }
+
+    if(msg.length > 0) {
+        errorMsg.textContent = msg.join(', ');
+        return
+    } 
+
     const orderData = {
-        cardNumber: document.getElementById('cardNumber').value,
-        expiryDate: document.getElementById('expiryDate').value,
-        cvv: document.getElementById('cvv').value,
+        cardNumber: cardNumber?.value,
+        expiryDate: expiryDate?.value,
+        cvv: cvv?.value,
         shippingAddress: {
             street: document.getElementById('street').value,
             city: document.getElementById('city').value,
-            postalCode: document.getElementById('postalCode').value,
+            postalCode: postalCode?.value,
             country: document.getElementById('country').value
         }
     };
