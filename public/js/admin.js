@@ -23,7 +23,6 @@ function adminFetchProducts() {
                     product.description,
                     product.category,
                     product.price,
-                    product.discountedPrice,
                     product.quantity,
                     product.retailer,
                     `<button class="btn btn-primary" onclick="openEditModal('${product._id}')">Edit</button>
@@ -40,7 +39,6 @@ function adminFetchProducts() {
                         <td>${product.description}</td>
                         <td>${product.category}</td>
                         <td>${product.price}</td>
-                        <td>${product.discountedPrice}</td>
                         <td>${product.quantity}</td>
                         <td>${product.retailer}</td>
                         <td>
@@ -162,6 +160,11 @@ addProductForm?.addEventListener('submit', function (event) {
             // Close modal and show success alert
             const modal = M.Modal.getInstance(document.getElementById('addProductModal'));
             modal.close();
+            socket.emit('newItem', {
+                from: 'Admin',
+                text: `A new Product ${data.data.name} has been added`,
+                createdAt: new Date().toISOString(),
+              });   
             showToast("Product added successfully");
             adminFetchProducts(); // Refresh product list
         } else {
@@ -186,7 +189,6 @@ function openEditModal(productId) {
             document.getElementById('productDescription').value = product.data.description;
             document.getElementById('productCategory').value = product.data.category;
             document.getElementById('productPrice').value = product.data.price;
-            document.getElementById('discountedProductPrice').value = product.data.discountedPrice;
             document.getElementById('productQuantity').value = product.data.quantity;
             document.getElementById('productRetailer').value = product.data.retailer;
 
@@ -216,7 +218,6 @@ editProductForm?.addEventListener('submit', function (event) {
         description: document.getElementById('productDescription').value,
         category: document.getElementById('productCategory').value,
         price: parseFloat(document.getElementById('productPrice').value),
-        discountedPrice: parseFloat(document.getElementById('discountedProductPrice').value),
         quantity: parseInt(document.getElementById('productQuantity').value, 10),
         retailer: document.getElementById('productRetailer').value,
     };
@@ -232,14 +233,6 @@ editProductForm?.addEventListener('submit', function (event) {
     .then((response) => response.json())
     .then((data) => {
         if(data.success) {
-
-            if(data.data.discountedPrice < data.data.price) {
-                showToast('Big Promo on ' + data.data.name)
-            }
-
-            if(data.data.quantity <= 2) {
-                showToast('not much in stock')
-            }
             // Close modal and refresh products list
             const modal = M.Modal.getInstance(document.getElementById('editProductModal'));
             modal.close();

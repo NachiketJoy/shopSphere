@@ -1,7 +1,7 @@
 let notifications = [];
 
 function updateNotifications(notification) {
-  console.log("Updating notifications with:", notification);
+  // console.log("Updating notifications with:", notification);
 
   notifications.unshift(notification);
 
@@ -49,4 +49,9 @@ socket.on("connect_error", (error) => {
 socket.on(`notification-${userId}`, (data) => {
   console.log("Received notification:", data);
   updateNotifications(data);
+});
+
+socket.on('newMessage', (message) => {
+  console.log('New message received:', message);
+  showToast(message.text); 
 });

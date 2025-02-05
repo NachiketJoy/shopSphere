@@ -20,10 +20,6 @@ const productSchema = new Schema(
       required: [true, "Product price is required"],
       min: [0, "Price cannot be negative"],
     },
-    discountedPrice: {
-      type: Number,
-      min: [0, "Price cannot be negative"],
-    },
     category: {
       type: String,
       required: [true, "Product category is required"],
