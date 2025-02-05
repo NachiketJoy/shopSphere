@@ -31,6 +31,7 @@
 
 .search-form {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   padding: 20px;
@@ -150,4 +151,43 @@
 
 .pagination-jump button:hover {
   background-color: var(--info);
+}
+
+/* Responsive */
+@media only screen and (max-width: 768px) {
+  .banner {
+    position: inherit;
+    height: 23vh;
+  }
+
+  .banner-img {
+    left: 0;
+    top: 12%;
+  }
+
+  .search-form {
+    flex-direction: column;
+  }
+
+  .pagination-container {
+    max-width: 300px;
+    overflow: auto;
+  }
+
+  .pagination-jump {
+    margin-left: 0;
+  }
+
+  .detailModal {
+    width: 95%;
+  }
+
+  .product-detail {
+    flex-direction: column;
+  }
+
+  .similar-products-list {
+    max-width: 300px;
+    overflow: scroll;
+  }
 }
