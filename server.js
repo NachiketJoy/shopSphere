@@ -50,10 +50,14 @@ app.use("/", cartRoutes);
 app.use("/", orderRoutes);
 
 io.on("connection", (socket) => {
-  // console.log("Client connected");
+  console.log("Client connected");
+
+  socket.on('newItem', (newItemData) => {
+    socket.broadcast.emit('newMessage', newItemData);
+  });
 
   socket.on("disconnect", () => {
-    // console.log("Client disconnected");
+    console.log("Client disconnected");
   });
 });
 
