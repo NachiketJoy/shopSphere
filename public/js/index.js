@@ -34,12 +34,14 @@ window.addEventListener('DOMContentLoaded', () => {
     const year = document.getElementById('year');
     const submitBtn = document.getElementById('valid-form');
     const errorMsg = document.getElementById('error');
+    const sidenav = document.querySelectorAll('.sidenav');
 
     const currentPage = window.location.pathname;
     const toastMessage = toastSuccess || toastError;
     year.textContent = new Date().getFullYear();
 
     M.Modal.init(detailModal);
+    M.Sidenav.init(sidenav);
 
     updateCartCount();
 
@@ -70,6 +72,15 @@ window.addEventListener('DOMContentLoaded', () => {
         "Macy's",
         "PetSmart",
     ];
+;
+
+      $('#userTable').DataTable({
+        responsive: true,
+        paging: true,
+        searching: true,
+        ordering: true,
+        pageLength: 5,
+      });
 
     if (toastMessage !== null) {
         const message = toastMessage.getAttribute('data-message');
@@ -198,6 +209,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Toggle pop up box
     if (userDropdownButton && userInfoPopup) {
+        const text = userDropdownButton.textContent || userDropdownButton.innerText;
+        const firstLetter = text.charAt(0).toUpperCase();
+        userDropdownButton.textContent = firstLetter;
+
         document.addEventListener("click", (e) => {
             // Check if the click target is the user dropdown button
             if (e.target === userDropdownButton) {

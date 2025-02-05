@@ -61,6 +61,7 @@ function adminFetchProducts() {
                     ordering: true,
                     info: true,
                     pageLength: 8,
+                    responsive: true
                 });
             }
         })
@@ -322,6 +323,7 @@ function fetchOrders() {
                     ordering: true,
                     info: true,
                     pageLength: 8,
+                    responsive: true,
                 });
 
             } else {

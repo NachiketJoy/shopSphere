@@ -221,3 +221,17 @@ a:active {
     transform: translate(200%);
   }
 }
+
+
+/* responsive */
+@media only screen and (max-width: 768px) {
+  .btn{
+    font-size: 10px;
+    padding: 0 16px;
+    line-height: 30px;
+  }
+
+  h2 {
+    font-size: 1.56rem;
+  }
+}
