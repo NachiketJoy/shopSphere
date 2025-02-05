@@ -143,6 +143,10 @@ a:active {
   background-color: var(--danger);
 }
 
+#error {
+  color: var(--danger)
+}
+
 @keyframes move {
   0%,
   49.99% {

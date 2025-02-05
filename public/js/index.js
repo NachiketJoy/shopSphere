@@ -14,6 +14,7 @@ window.addEventListener('load', () => {
 window.addEventListener('DOMContentLoaded', () => {
     const authentication = document.getElementById('authentication');
     const registerBtn = document.getElementById('register');
+    const registerForm = document.getElementById('register-form');
     const loginBtn = document.getElementById('login');
     const logoutBtn = document.getElementById('logout');
     const manageProductBtn = document.getElementById('manageProduct');
@@ -27,7 +28,12 @@ window.addEventListener('DOMContentLoaded', () => {
     const userInfoPopup = document.getElementById("userInfoPopup");
     const searchForm = document.getElementById("searchForm");
     const detailModal = document.getElementById('detailProductModal');
+    const fullName = document.getElementById('fullName');
+    const email = document.getElementById('emailRegister');
+    const password = document.getElementById('passwordRegister');
     const year = document.getElementById('year');
+    const submitBtn = document.getElementById('valid-form');
+    const errorMsg = document.getElementById('error');
 
     const currentPage = window.location.pathname;
     const toastMessage = toastSuccess || toastError;
@@ -115,6 +121,41 @@ window.addEventListener('DOMContentLoaded', () => {
     registerBtn?.addEventListener('click', () => {
         authentication.classList.add("active");
     });
+
+    //validation
+    submitBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const emailIsValid = validEmail => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(validEmail); 
+        const strongPassword = validPassword => /^(?=.*[!@#$%^&*])[\S]{8,}$/.test(validPassword); 
+
+        errorMsg.textContent= '';
+        let msg = []; 
+
+        if (!fullName.value) {
+            msg.push("Name should not be empty");
+        }
+
+        if (!email.value) {
+            msg.push("Please enter your email address.");
+        } else if (!emailIsValid(email.value)) {
+            msg.push("Please enter a valid email.");
+        }
+    
+        if (!password.value) {
+            msg.push("Please enter a password.");
+        } else if (!strongPassword(password.value)) {
+            msg.push('Password should be at least 8 characters and contain at least 1 special character (!@#$%^&*).');
+        }
+
+        if (msg.length > 0) {
+            errorMsg.textContent = msg.join(', ');
+            return;
+        }
+
+        registerForm?.submit();
+    });
+
 
     loginBtn?.addEventListener('click', () => {
         authentication.classList.remove("active");
@@ -288,7 +329,7 @@ function displayProducts(products) {
                 `
         }
     })
-    .join("");
+        .join("");
 }
 
 function displayPagination(pagination) {
@@ -389,8 +430,8 @@ function jumpToPage(totalPages) {
 
 async function addToCart(productId, event) {
     // Prevent the button from triggering the show details function
-    event.stopPropagation(); 
-    
+    event.stopPropagation();
+
     try {
         const response = await fetch("/cart/add", {
             method: "POST",
@@ -424,8 +465,8 @@ function showNewestProduct() {
     const validProducts = productsList.filter(p => p.createdAt && !isNaN(new Date(p.createdAt).getTime()));
 
     const newProducts = validProducts
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .slice(0, 5);
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 5);
 
     newProductsContainer.innerHTML = "";
 
@@ -492,51 +533,3 @@ function showProductDetails(productId) {
     const modal = M.Modal.getInstance(document.getElementById("detailProductModal"));
     modal.open();
 }
-
-
-//validation
-const submitBtn = document.getElementById('valid-form'); 
-const error = document.getElementById('error'); 
-submitBtn?.addEventListener('click', (e) => { 
-e.preventDefault(); 
-let msg= []; 
-
-const fullName = document.getElementById('fullName'); 
-const email = document.getElementById('emailRegister');
-const password = document.getElementById('passwordRegister');
-const emailIsValid = email => { 
-return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); 
-} 
-const strongPassword = password => { 
-return /^(?=.*[!@#$%^&*])[\S]{8,}$/.test(password); 
-}; 
-
-if (fullName.value === "") { 
-msg.push("Please enter your username."); 
-error.innerText = msg.join(', ');
-fullName.focus();
-return false; 
-} 
-
-if (email.value === "") { 
-msg.push("Please enter your email address."); 
-error.innerText = msg.join(', ');
-email.focus();
-return false; 
-} 
-
-if (!emailIsValid(email.value)) { 
-msg.push("Please enter a valid email."); 
-error.innerText = msg.join(', ');
-email.focus(); 
-return false; 
-} 
-if (!strongPassword(password.value)) { 
-msg.push('Password should be at least 8 characters and contain at least 1 special character (!@#$%^&*).'); 
-error.innerText = msg.join(', ') 
-password.focus(); 
-return false; 
-} 
-document.getElementById('register-form').submit(); 
-return true; 
-}); 
