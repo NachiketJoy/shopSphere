@@ -3,6 +3,7 @@ const passwordUpdateForm = document.getElementById("passwordForm");
 const addProductBtn = document.getElementById("addProductBtn");
 const addProductForm = document.getElementById("addProductForm");
 const editProductForm = document.getElementById("editProductForm");
+const errorMsg = document.getElementById('error'); 
 
 function adminFetchProducts() {
     fetch('/products')
@@ -333,25 +334,25 @@ function fetchOrders() {
 // Function to handle the update password form
 passwordUpdateForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-    // retrieve both password field value
-    const currentPassword = document.getElementById('currentPassword').value;
-    const newPassword = document.getElementById('newPassword').value;
-    const errorMsg = document.getElementById('error'); 
 
+    errorMsg.textContent= '';
     let msg = [];
 
-    const strongPassword = password => {
-        return /^(?=.*[!@#$%^&*])[\S]{8,}$/.test(password);
-    };
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
 
-    if (!strongPassword(newPassword.value)) {
-        msg.push('Password should be at least 8 characters and contain at least 1 special character (!@#$%^&*).');
-        errorMsg.innerText = msg.join(', ');
-        newPassword.focus();
-        return false;
-    }
+    // const strongPassword = password => {
+    //     return /^(?=.*[!@#$%^&*])[\S]{8,}$/.test(password);
+    // };
 
+    // if (!strongPassword(newPassword)) {
+    //     msg.push('Password should be at least 8 characters and contain at least 1 special character (!@#$%^&*).');
+    //     errorMsg.innerText = msg.join(', ');
+    //     return ;
+    // }
+
+    // console.log(newPassword)
+    // console.log(current)
     try {
       const response = await fetch('/update-password', {
         method: 'POST',
