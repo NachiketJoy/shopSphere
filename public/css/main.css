@@ -231,6 +231,10 @@ a:active {
     line-height: 30px;
   }
 
+  h1 {
+    font-size: 28px;
+  }
+
   h2 {
     font-size: 1.56rem;
   }
