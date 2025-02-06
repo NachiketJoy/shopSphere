@@ -1,4 +1,3 @@
-
 # SIT725 Group Project
 - Term: T3/2024
 - Project: ShopSphere
@@ -31,7 +30,7 @@ Create a .env file in then root and add the following
 ```
 
 .env:
-MONGODB_URI = you can use the same as the previous one
+MONGODB_URI = 'mongodb+srv://shop-sphere:ShopSphere123@shop-sphere.cm7hq.mongodb.net/'
 SECRET_KEY = 'shopSphere'
 PORT = 3002
 ADMIN_PASSWORD = '12345'
