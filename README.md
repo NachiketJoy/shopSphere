@@ -23,21 +23,11 @@
 - User will need to register - to login
 - User cant access dashboard
 
-### Env Variables
 
-Create a .env file in then root and add the following
-
+### Clone the Repo: 
 ```
-
-.env:
-MONGODB_URI = 'mongodb+srv://shop-sphere:ShopSphere123@shop-sphere.cm7hq.mongodb.net/'
-SECRET_KEY = 'shopSphere'
-PORT = 3002
-ADMIN_PASSWORD = '12345'
-ADMIN_LOGIN_EMAIL = 'admin@example.com
-
+git clone https://github.com/NachiketJoy/shopSphere.git
 ```
-
 ## Install Dependencies
 
 ```
@@ -48,9 +38,23 @@ npm install
 ## Run App
 
 ```
-
 # Run in dev mode
 
 npm run start
+
+```
+
+### Env Variables
+
+Create a .env file in the root and add the following
+
+```
+
+.env:
+MONGODB_URI = 'mongodb+srv://shop-sphere:ShopSphere123@shop-sphere.cm7hq.mongodb.net/'
+SECRET_KEY = 'shopSphere'
+PORT = 3002
+ADMIN_PASSWORD = '12345'
+ADMIN_LOGIN_EMAIL = 'admin@example.com
 
 ```
